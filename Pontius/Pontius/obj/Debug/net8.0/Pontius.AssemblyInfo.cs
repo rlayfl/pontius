@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Pontius")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c2b8c510cc03cb7282c69f986cabd954cf7f70da")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c4afcd49bb0ba9ac63690572097ee75dcd48c62c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Pontius")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Pontius")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -48,7 +48,8 @@ namespace Pontius.Controllers
             var payload = new
             {
                 username = debugUsername,
-                password = debugPassword
+                password = debugPassword,
+                experimentType = GetRandomExperimentType()
             };
 
             var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), System.Text.Encoding.UTF8, "application/json");
@@ -70,7 +71,13 @@ namespace Pontius.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-    }
 
-
+        public ExperimentType GetRandomExperimentType()
+        {
+            var values = Enum.GetValues(typeof(ExperimentType));
+            var random = new Random();
+            var value = values.GetValue(random.Next(values.Length));
+            return value is not null ? (ExperimentType)value : default;
+        }
+    }   
 }
