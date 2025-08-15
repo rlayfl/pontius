@@ -13,11 +13,15 @@
 <div class="container">
     <div class="row">
         <div class="col-3 offset-7">
+            @{
+                var currentUrl = Context.Request.Path.Value?.ToLower();
+            }
+
             <ul>
-                <li>home</li>
-                <li>begin experiment</li>
-                <li>frequently asked questions</li>
-                <li>statistics</li>
+                <li class="@(currentUrl == "/" ? "current-page" : "")">home</li>
+                <li class="@(currentUrl == "/home/startexperiment" ? "current-page" : "")">start experiment</li>
+                <li class="@(currentUrl == "/home/faq" ? "current-page" : "")">frequently asked questions</li>
+                <li class="@(currentUrl == "/home/statistics" ? "current-page" : "")">statistics</li>
             </ul>
         </div>
     </div>

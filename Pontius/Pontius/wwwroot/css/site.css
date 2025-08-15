@@ -7,3 +7,7 @@ body {
 ul {
   list-style-type: "- ";
 }
+
+ul .current-page {
+  font-weight: 800;
+}
