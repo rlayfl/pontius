@@ -23,15 +23,6 @@
     <div class="row">
         <div class="w-100 text-center pt-5 pb-5">
             <a href="/"><h1>Pontius</h1></a>
-            @{
-                var experimentType = User?.FindFirst("experimenttype")?.Value;
-                if (!string.IsNullOrEmpty(experimentType))
-                {
-                    <div>
-                        <strong>Experiment Type:</strong> @experimentType
-                    </div>
-                }
-            }
         </div>
     </div>
 </div>

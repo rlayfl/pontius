@@ -18,7 +18,6 @@ async function startExperiment() {
 
         if (!response.ok) {
             console.error('Failed to register. Status:', response.status);
-            // Optionally show message to user
             return;
         }
 

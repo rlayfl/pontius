@@ -2,20 +2,91 @@
     ViewData["Title"] = "Experiment - Start";
 }
 
+@{
+    var experimentType = User?.FindFirst("experimenttype")?.Value;
+}
+
+@switch (experimentType)
+{
+    case "Competition":
+        <div class="alert">You have selected Experiment Type A.</div>
+        break;
+    default:
+        <div class="alert alert-secondary">Unknown experiment type selected.</div>
+        break;
+}
+
+@{
+    
+    var trinityHouseInfo = @"
+    <ul>
+    <li>Official name: The Corporation of Trinity House of Deptford Strond.</li>
+    <li>Also known as: Trinity House.</li>
+    <li>Formal title: The Master, Wardens and Assistants of the Guild Fraternity or Brotherhood of the most glorious and undivided Trinity and of St Clement in the Parish of Deptford Strond in the County of Kent.</li>
+    <li>Official authority for lighthouses in:
+        <ul>
+        <li>England</li>
+        <li>Wales</li>
+        <li>The Channel Islands</li>
+        <li>Gibraltar</li>
+        </ul>
+    </li>
+    <li>Responsible for other navigational aids, including:
+        <ul>
+        <li>Lightvessels</li>
+        <li>Buoys</li>
+        <li>Maritime radio/satellite communication systems</li>
+        </ul>
+    </li>
+    <li>Official deep sea pilotage authority for ships trading in Northern European waters.</li>
+    <li>Maritime charity activities:
+        <ul>
+        <li>Welfare of retired seamen</li>
+        <li>Training of young cadets</li>
+        <li>Promotion of safety at sea</li>
+        </ul>
+    </li>
+    <li>Charitable expenditure for year ending March 2024: approximately £12.3 million.</li>
+    <li>Lighthouse service funding:
+        <ul>
+        <li>From &quot;light dues&quot; levied on commercial vessels calling at British Isles ports</li>
+        <li>Based on net registered tonnage</li>
+        <li>Rate set by Department for Transport and reviewed annually</li>
+        </ul>
+    </li>
+    <li>Maritime charity funding is generated separately.</li>
+    <li>Founded in 1514.</li>
+    <li>First Master: Sir Thomas Spert, sailing master of Henry VIII’s flagship <em>Mary Rose</em> and <em>Henry Grace à Dieu</em>.</li>
+    </ul>";   
+
+    // Dictionary of buoy types with descriptions and image links
+    var buoyTypes = new Dictionary<string, (string Description, string ImageUrl)>
+    {
+        { "Cardinal Mark North", ("Indicates safe water to the north.", "/images/buoys/cmn.png") },
+        { "Cardinal Mark East", ("Indicates safe water to the east.", "/images/buoys/cme.png") },
+        { "Cardinal Mark South", ("Indicates safe water to the south.", "/images/buoys/cms.png") },
+        { "Cardinal Mark West", ("Indicates safe water to the west.", "/images/buoys/cmw.png") },
+        { "Emergency Wreck", ("Marks a newly discovered wreck.", "/images/buoys/w.png") },
+        { "Isolated Danger", ("Marks an isolated danger with safe water all around.", "/images/buoys/id.png") },
+        { "Port Lateral", ("Marks the port (left) side of a channel.", "/images/buoys/port.png") },
+        { "Starboard Lateral", ("Marks the starboard (right) side of a channel.", "/images/buoys/starboard.png") },
+        { "Safe Water", ("Indicates there is safe water all around.", "/images/buoys/sw.png") },
+        { "Special Mark", ("Indicates a special area or feature.", "/images/buoys/s.png") }
+    };
+}
+
 <ul>
+@foreach (var buoy in buoyTypes)
+{
     <li>
-        Cardinal Mark North
+        <strong>@buoy.Key</strong>: @buoy.Value.Description
+        <br />
+        <img src="@buoy.Value.ImageUrl" alt="@buoy.Key" style="height:40px;" />
     </li>
-    <li>
-        Cardinal Mark East
-    </li>
-    <li>
-        Cardinal Mark South
-    </li>
-    <li>
-        Cardinal Mark West
-    </li>
+}
 </ul>
+
+@Html.Raw(trinityHouseInfo)
 
 <form id="startTestForm" onsubmit="startTest(); return false;">
 
