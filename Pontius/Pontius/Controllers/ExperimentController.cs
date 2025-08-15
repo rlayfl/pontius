@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Pontius.Models;
 using Pontius.ExperimentObjects;
 using System.Diagnostics;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Pontius.Controllers
 {
@@ -57,6 +60,20 @@ namespace Pontius.Controllers
             using var httpClient = new HttpClient();
             var registerResponse = await httpClient.PostAsync(_firebaseExperimentsTableEndpoint, content);
 
+            if (registerResponse.IsSuccessStatusCode)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, debugUsername),
+                    new Claim(ClaimTypes.Name, debugUsername),
+                    new Claim(ClaimTypes.Role, "Legionnaire"),
+                };
+
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            }
 
             return Json(new { success = true, message = "DEBUG SUCCESS." });
         }
