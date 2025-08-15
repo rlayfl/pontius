@@ -22,6 +22,24 @@ namespace Pontius.Controllers
             _firebaseExperimentsTableEndpoint = $"{_firebaseDatabaseEndpoint}experiments.json";
         }
 
+        [HttpGet]
+        public async Task<IActionResult> End()
+        {
+            if (User?.Identity?.IsAuthenticated == true)
+            {
+                // Sign out of the cookie auth scheme; be explicit about the scheme
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                // If you have an external cookie, you might also want to clear it:
+                // await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            // If not authenticated, just show the page (or also redirect—your call)
+            return View();
+        }
+
         public IActionResult Feedback()
         {
             return View();
@@ -42,17 +60,18 @@ namespace Pontius.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> Start([FromBody] Start start)
+        public async Task<IActionResult> Start([FromBody] Start start)
         {
 
             var debugUsername = "TestUsername";
             var debugPassword = "TestPassword";
+            var experimentType = GetRandomExperimentType();
 
             var payload = new
             {
                 username = debugUsername,
                 password = debugPassword,
-                experimentType = GetRandomExperimentType()
+                experimentType = experimentType
             };
 
             var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), System.Text.Encoding.UTF8, "application/json");
@@ -64,18 +83,21 @@ namespace Pontius.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.NameIdentifier, debugUsername),
-                    new Claim(ClaimTypes.Name, debugUsername),
-                    new Claim(ClaimTypes.Role, "Legionnaire"),
+                    new(ClaimTypes.NameIdentifier, debugUsername),
+                    new(ClaimTypes.Name, debugUsername),
+                    new(ClaimTypes.Role, "Legionnaire"),
+                    new("ExperimentType", experimentType.ToString())
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") });
             }
 
-            return Json(new { success = true, message = "DEBUG SUCCESS." });
+            return Json(new { success = false, message = "Something went wrong DEBUG." });
         }
 
         public IActionResult Test()

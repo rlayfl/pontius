@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -34,6 +39,12 @@
                 <a href="/home/faqs"><li class="@(currentUrl == "/home/faq" ? "current-page" : "")">faqs</li></a>
                 <a href="/experiment/start"><li class="@(currentUrl == "/experiment/start" ? "current-page" : "")">start experiment</li></a>
                 <a href="/experiment/statistics"><li class="@(currentUrl == "/experiment/statistics" ? "current-page" : "")">statistics</li></a>
+                
+
+                @if (User?.Identity?.IsAuthenticated == true)
+                {
+                    <a href="/experiment/end"><li class="danger">end experiment</li></a>
+                }
             </ul>
         </div>
     </div>
