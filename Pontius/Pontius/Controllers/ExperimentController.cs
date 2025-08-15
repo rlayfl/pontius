@@ -94,7 +94,7 @@ namespace Pontius.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                return Json(new { success = true, redirectUrl = Url.Action("Index", "Home") });
+                return Json(new { success = true, redirectUrl = Url.Action("overview", "buoys") });
             }
 
             return Json(new { success = false, message = "Something went wrong DEBUG." });

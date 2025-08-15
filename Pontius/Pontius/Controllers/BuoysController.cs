@@ -13,6 +13,7 @@ namespace Pontius.Controllers
             _logger = logger;
         }
 
+        [RedirectIfNOTAuthenticated]
         public IActionResult Overview()
         {
             return View();
