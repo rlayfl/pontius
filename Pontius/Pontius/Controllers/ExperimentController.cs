@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 
 namespace Pontius.Controllers
 {
@@ -25,20 +26,22 @@ namespace Pontius.Controllers
         [HttpGet]
         public async Task<IActionResult> End()
         {
-            if (User?.Identity?.IsAuthenticated == true)
-            {
-                // Sign out of the cookie auth scheme; be explicit about the scheme
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            // If you use Session anywhere, this is fine. Otherwise remove it.
+            HttpContext.Session.Clear();
 
-                // If you have an external cookie, you might also want to clear it:
-                // await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            // Optional: only delete auth cookie to avoid nuking consent/antiforgery/TempData
+            // Response.Cookies.Delete(".MyApp.Auth"); // if you set a custom name
+            // Otherwise just sign out:
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-                return RedirectToAction("Index", "Home");
-            }
+            // Cache-busting to avoid back-button showing private pages
+            Response.Headers.CacheControl = "no-store, no-cache, must-revalidate";
+            Response.Headers.Pragma = "no-cache";
+            Response.Headers.Expires = "0";
 
-            // If not authenticated, just show the page (or also redirect—your call)
-            return View();
+            return RedirectToAction("Index", "Home");
         }
+
 
         public IActionResult Feedback()
         {
@@ -86,7 +89,8 @@ namespace Pontius.Controllers
                     new(ClaimTypes.NameIdentifier, debugUsername),
                     new(ClaimTypes.Name, debugUsername),
                     new(ClaimTypes.Role, "Legionnaire"),
-                    new("ExperimentType", experimentType.ToString())
+                    new("ExperimentType", experimentType.ToString()),
+                    new("HasStartedTest", false.ToString())
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -100,10 +104,41 @@ namespace Pontius.Controllers
             return Json(new { success = false, message = "Something went wrong DEBUG." });
         }
 
+        [HttpGet]
         public IActionResult Test()
         {
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Test([FromBody] Test test)
+        {
+            var current = User as ClaimsPrincipal;
+            if (current?.Identity is not ClaimsIdentity currentIdentity)
+            return Unauthorized();
+
+            var claims = currentIdentity.Claims.ToList();
+            claims.RemoveAll(c => c.Type == "HasStartedTest");
+            claims.Add(new Claim("HasStartedTest", bool.TrueString));
+
+            var newIdentity = new ClaimsIdentity(
+            claims,
+            CookieAuthenticationDefaults.AuthenticationScheme
+            );
+
+            var newPrincipal = new ClaimsPrincipal(newIdentity);
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            newPrincipal
+            );
+
+            HttpContext.User = newPrincipal;
+
+            return Json(new { success = true, redirectUrl = Url.Action("test", "experiment") });
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

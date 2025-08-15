@@ -1,17 +1,18 @@
-async function startExperiment() {
+async function startTest() {
 
+    alert("Helo")
 
-    const form = document.getElementById("startExperimentForm");
+    const form = document.getElementById("startTestForm");
     const formData = new FormData(form);
 
     const payload = Object.fromEntries(formData.entries());
 
     try {
-        const response = await fetch('Start', {
+        const response = await fetch('/experiment/test', {
             method: 'POST',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
         });
