@@ -22,7 +22,7 @@
         <div class="container"></div>
     <div class="row">
         <div class="w-100 text-center pt-5 pb-5">
-            <h1>Pontius</h1>
+            <a href="/"><h1>Pontius</h1></a>
             @{
                 var experimentType = User?.FindFirst("experimenttype")?.Value;
                 if (!string.IsNullOrEmpty(experimentType))
@@ -45,7 +45,7 @@
 
             <ul>
                 <a href="/"><li class="@(currentUrl == "/" ? "current-page" : "")">home</li></a>
-                <a href="/home/faqs"><li class="@(currentUrl == "/home/faq" ? "current-page" : "")">faqs</li></a>
+                <a href="/home/faqs"><li class="@(currentUrl == "/home/faqs" ? "current-page" : "")">faqs</li></a>
                 <a href="/experiment/start"><li class="@(currentUrl == "/experiment/start" ? "current-page" : "")">start experiment</li></a>
                 <a href="/experiment/statistics"><li class="@(currentUrl == "/experiment/statistics" ? "current-page" : "")">statistics</li></a>
                 

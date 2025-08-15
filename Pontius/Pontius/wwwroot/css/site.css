@@ -25,3 +25,30 @@ a:hover {
 .danger {
   color: red;
 }
+
+button, input[type="submit"], input[type="reset"], .btn, .btn-primary{
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.btn-primary::before {
+  content: "-";
+  margin-right: 4px;
+}
+
+.btn-primary:hover {
+  background: none;
+  border: none;
+  color: inherit;
+  text-decoration: none;
+  color: gold;
+}
+
+.btn-primary:focus {
+  outline: none;
+}
