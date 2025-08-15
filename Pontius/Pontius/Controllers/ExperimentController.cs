@@ -4,26 +4,31 @@ using System.Diagnostics;
 
 namespace Pontius.Controllers
 {
-    public class HomeController : Controller
+    public class ExperimentController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public ExperimentController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Feedback()
         {
             return View();
         }
 
-        public IActionResult FAQs()
+        public IActionResult Statistics()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Start()
+        {
+            return View();
+        }
+
+        public IActionResult Test()
         {
             return View();
         }

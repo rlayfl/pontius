@@ -2,6 +2,7 @@ body {
   font-family: "Luxurious Roman", serif;
   font-weight: 400;
   font-style: normal;
+  color: black;
 }
 
 ul {
@@ -10,4 +11,13 @@ ul {
 
 ul .current-page {
   font-weight: 800;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:hover {
+  color: gold;
 }

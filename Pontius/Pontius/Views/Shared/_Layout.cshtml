@@ -14,6 +14,30 @@
 </head>
 <body>
     <header>
+        <div class="container"></div>
+    <div class="row">
+        <div class="w-100 text-center pt-5 pb-5">
+            <h1>Pontius</h1>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-3 offset-7">
+            @{
+                var currentUrl = Context.Request.Path.Value?.ToLower();
+            }
+
+            <ul>
+                <a href="/"><li class="@(currentUrl == "/" ? "current-page" : "")">home</li></a>
+                <a href="/home/faqs"><li class="@(currentUrl == "/home/faq" ? "current-page" : "")">faqs</li></a>
+                <a href="/experiment/start"><li class="@(currentUrl == "/experiment/start" ? "current-page" : "")">start experiment</li></a>
+                <a href="/experiment/statistics"><li class="@(currentUrl == "/experiment/statistics" ? "current-page" : "")">statistics</li></a>
+            </ul>
+        </div>
+    </div>
+</div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">

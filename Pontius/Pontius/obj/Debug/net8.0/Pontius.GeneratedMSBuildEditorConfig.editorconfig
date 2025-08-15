@@ -18,6 +18,30 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes = true
 build_property.MSBuildProjectDirectory = D:\PhD Computer Science\pontius\Pontius\Pontius
 build_property._RazorSourceGeneratorDebug = 
 
+[D:/PhD Computer Science/pontius/Pontius/Pontius/Views/Buoys/Overview.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQnVveXNcT3ZlcnZpZXcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PhD Computer Science/pontius/Pontius/Pontius/Views/Experiment/Feedback.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZXJpbWVudFxGZWVkYmFjay5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PhD Computer Science/pontius/Pontius/Pontius/Views/Experiment/Start.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZXJpbWVudFxTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PhD Computer Science/pontius/Pontius/Pontius/Views/Experiment/Statistics.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZXJpbWVudFxTdGF0aXN0aWNzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PhD Computer Science/pontius/Pontius/Pontius/Views/Experiment/Test.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZXJpbWVudFxUZXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/PhD Computer Science/pontius/Pontius/Pontius/Views/Home/FAQs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxGQVFzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/PhD Computer Science/pontius/Pontius/Pontius/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
