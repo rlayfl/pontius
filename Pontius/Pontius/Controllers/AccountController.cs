@@ -37,7 +37,7 @@ namespace Pontius.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateAccount createAccount)
         {
-            var debugEmail = "TestEmail@email.com";
+            var debugEmail = "TestEmail2@email.com";
             var debugPassword = "TestPassword";
 
             var payload = new
@@ -73,8 +73,6 @@ namespace Pontius.Controllers
 
             return Json(new { success = false, message = "Something went wrong DEBUG." });
         }
-
-
 
         [RedirectIfAuthenticated]
         public IActionResult Login()

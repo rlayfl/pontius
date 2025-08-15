@@ -6,11 +6,11 @@
 <form id="createAccountForm" onsubmit="createAccount(); return false;">
 
     <div class="form-group">
-        <label for="uniqueIdentifier">Choose a Unique Identifier</label>
-        <input type="text" class="form-control" id="uniqueIdentifier" name="uniqueIdentifier" required />
+        <label for="emailAddress">Email Address</label>
+        <input type="email" class="form-control" id="emailAddress" name="emailAddress" value="email@email.com" required />
 
         <label for="password">Choose a Password</label>
-        <input type="password" class="form-control" id="password" name="password" required />
+        <input type="password" class="form-control" id="password" name="password" value="testpassword" required />
     </div>
 
     <button type="submit" class="btn btn-primary">Create Research Account</button>
