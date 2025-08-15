@@ -5,11 +5,13 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Pontius</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Pontius.styles.css" asp-append-version="true" />
 
@@ -17,38 +19,51 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luxurious+Roman&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header>
         <div class="container"></div>
-    <div class="row">
-        <div class="w-100 text-center pt-5 pb-5">
-            <a href="/"><h1>Pontius</h1></a>
+        <div class="row">
+            <div class="w-100 text-center pt-5 pb-5">
+                <a href="/">
+                    <h1>Pontius</h1>
+                </a>
+            </div>
         </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="row">
-        <div class="col-3 offset-7">
-            @{
-                var currentUrl = Context.Request.Path.Value?.ToLower();
-            }
-
-            <ul>
-                <a href="/"><li class="@(currentUrl == "/" ? "current-page" : "")">home</li></a>
-                <a href="/home/faqs"><li class="@(currentUrl == "/home/faqs" ? "current-page" : "")">faqs</li></a>
-                <a href="/experiment/start"><li class="@(currentUrl == "/experiment/start" ? "current-page" : "")">start experiment</li></a>
-                <a href="/experiment/statistics"><li class="@(currentUrl == "/experiment/statistics" ? "current-page" : "")">statistics</li></a>
-                
-
-                @if (User?.Identity?.IsAuthenticated == true)
-                {
-                    <a href="/experiment/end"><li class="danger">end experiment</li></a>
-                }
-            </ul>
         </div>
-    </div>
-</div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-3 offset-7">
+                    @{
+                        var currentUrl = Context.Request.Path.Value?.ToLower();
+                    }
+
+                    <ul>
+                        <a href="/">
+                            <li class="@(currentUrl == "/" ? "current-page" : "")">home</li>
+                        </a>
+                        <a href="/home/faqs">
+                            <li class="@(currentUrl == "/home/faqs" ? "current-page" : "")">faqs</li>
+                        </a>
+                        <a href="/experiment/start">
+                            <li class="@(currentUrl == "/experiment/start" ? "current-page" : "")">start experiment</li>
+                        </a>
+                        <a href="/experiment/statistics">
+                            <li class="@(currentUrl == "/experiment/statistics" ? "current-page" : "")">statistics</li>
+                        </a>
+
+
+                        @if (User?.Identity?.IsAuthenticated == true)
+                        {
+                            <a href="/experiment/end">
+                                <li class="danger">end experiment</li>
+                            </a>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -56,11 +71,11 @@
         </main>
     </div>
 
-    <footer class="fixed-bottom pb-5">
+    <footer class="pb-5">
         <div class="container">
             <div class="row">
                 <div class="text-center w-100">
-                    &copy; 2025 - Pontius 
+                    &copy; 2025 - Pontius
                 </div>
                 <div class="text-center w-100">
                     Richard Lay-Flurrie
@@ -76,4 +91,5 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
