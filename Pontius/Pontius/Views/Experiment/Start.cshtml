@@ -2,4 +2,11 @@
     ViewData["Title"] = "Experiment - Start";
 }
 
-<button type="button" class="btn btn-primary">Start Experiment</button>
+
+<form id="registerForm" onsubmit="startExperiment(); return false;">
+
+    <button type="submit" class="btn btn-primary">Start</button>
+
+</form>
+
+<script src="/js/experiment/start.js"></script>
