@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Pontius.Models;
 using Pontius.ExperimentObjects;
 using System.Diagnostics;
-using System.Net.Http;
 
 namespace Pontius.Controllers
 {
@@ -17,7 +16,7 @@ namespace Pontius.Controllers
         public ExperimentController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _firebaseExperimentsTableEndpoint = $"{_firebaseDatabaseEndpoint}experiments";
+            _firebaseExperimentsTableEndpoint = $"{_firebaseDatabaseEndpoint}experiments.json";
         }
 
         public IActionResult Feedback()
@@ -46,13 +45,10 @@ namespace Pontius.Controllers
             var debugUsername = "TestUsername";
             var debugPassword = "TestPassword";
 
-
-
             var payload = new
             {
                 username = debugUsername,
-                password = debugPassword,
-                returnSecureToken = true
+                password = debugPassword
             };
 
             var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), System.Text.Encoding.UTF8, "application/json");
@@ -75,4 +71,6 @@ namespace Pontius.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
+
+
 }
