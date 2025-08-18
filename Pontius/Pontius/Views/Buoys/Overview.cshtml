@@ -8,8 +8,23 @@
 
 @switch (experimentType)
 {
+    case "InformationOverload":
+        <div class="alert alert-info">You have selected Information Overload experiment.</div>
+        break;
+    case "Complexity":
+        <div class="alert alert-info">You have selected Complexity experiment.</div>
+        break;
+    case "TimePressure":
+        <div class="alert alert-info">You have selected Time Pressure experiment.</div>
+        break;
+    case "Uncertainty":
+        <div class="alert alert-info">You have selected Uncertainty experiment.</div>
+        break;
     case "Competition":
-        <div class="alert">You have selected Experiment Type A.</div>
+        <div class="alert alert-info">You have selected Competition experiment.</div>
+        break;
+    case "Risk":
+        <div class="alert alert-info">You have selected Risk experiment.</div>
         break;
     default:
         <div class="alert alert-secondary">Unknown experiment type selected.</div>
@@ -189,6 +204,9 @@ Trinity House Motor Boat No.1.</li>
 </ul>";
 }
 
+@Html.Raw(trinityHouseInfo)
+
+@Html.Raw(buoyHistoryInfo)
 
 <ul>
     @foreach (var buoy in buoyTypes)
@@ -200,10 +218,6 @@ Trinity House Motor Boat No.1.</li>
         </li>
     }
 </ul>
-
-@Html.Raw(trinityHouseInfo)
-
-@Html.Raw(buoyHistoryInfo)
 
 @Html.Raw(trinityHouseHistoryInfo)
 

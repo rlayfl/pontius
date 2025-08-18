@@ -72,3 +72,7 @@ node_modules/
 bower_components/
 .env
 .env.*
+Pontius/.vs/Pontius/v17/.suo
+Pontius/.vs/Pontius/v17/DocumentLayout.json
+Pontius/Pontius/obj/Debug/net8.0/Pontius.AssemblyInfo.cs
+Pontius/Pontius/obj/Debug/net8.0/Pontius.AssemblyInfoInputs.cache
