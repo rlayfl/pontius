@@ -1,78 +1,58 @@
-## .NET Core MVC
+## .NET Core MVC (VS Code)
+
+# Build output
 bin/
 obj/
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
-*.vs/
-*.dbmdl
+[Ll]ogs/
+[Tt]est[Rr]esult*/
 *.pdb
+*.dll
+*.exe
 *.cache
 *.log
-*.vspscc
-*.vssscc
-*.ncrunch*
-_ReSharper*/
-*.DotSettings.user
-TestResult*/
-*.publish/
 *.tmp
 *.bak
 *.swp
 *.orig
-project.lock.json
-project.fragment.lock.json
-*.ide
-*.sln.ide
-*.vscode/
-*.coverage
-*.coveragexml
-*.testsettings
-*.vsmdi
-*.psess
-*.vsp
-*.dll
-*.exe
-*.x86
-*.x64
-*.deps.json
-*.runtimeconfig.json
-*.runtimeconfig.dev.json
-*.config
-*.launch.json
-*.docstates
-*.pidb
-*.svclog
-*.scc
-*.sln*
+
+# User-specific
+*.user
 *.csproj.user
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# ASP.NET / EF / Databases
 *.db
 *.sqlite
 *.mdf
 *.ldf
-*.jfm
-*.ipch
-*.aps
-*.ncb
-*.opendb
-*.opensdf
-*.sdf
-*.cachefile
 *.dbmdl
-*.bak
-*.swp
-*.orig
-*.tmp
-*.log
-*.vs/
+
+# Generated files
+*.deps.json
+*.runtimeconfig.json
+*.runtimeconfig.dev.json
+*.GeneratedMSBuildEditorConfig.editorconfig
+
+# Publish
+*.publish/
+publish/
+
+# Frontend packages
 wwwroot/node_modules/
 wwwroot/lib/
 node_modules/
 bower_components/
+package-lock.json
+yarn.lock
+
+# Environment
 .env
 .env.*
-Pontius/.vs/Pontius/v17/.suo
-Pontius/.vs/Pontius/v17/DocumentLayout.json
-Pontius/Pontius/obj/Debug/net8.0/Pontius.AssemblyInfo.cs
-Pontius/Pontius/obj/Debug/net8.0/Pontius.AssemblyInfoInputs.cache
+
+# OS-specific
+.DS_Store
+Thumbs.db
+desktop.ini
