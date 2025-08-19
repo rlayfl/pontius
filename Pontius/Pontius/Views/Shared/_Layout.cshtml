@@ -46,9 +46,7 @@
                         <a href="/home/faqs">
                             <li class="@(currentUrl == "/home/faqs" ? "current-page" : "")">faqs</li>
                         </a>
-                        <a href="/experiment/start">
-                            <li class="@(currentUrl == "/experiment/start" ? "current-page" : "")">start experiment</li>
-                        </a>
+                        
                         <a href="/experiment/statistics">
                             <li class="@(currentUrl == "/experiment/statistics" ? "current-page" : "")">statistics</li>
                         </a>
@@ -61,6 +59,12 @@
                             <a href="/account/create">
                                 <li class="@(currentUrl == "/account/create" ? "current-page" : "")">create research account
                                 </li>
+                            </a>
+                        }
+
+                        @if (User != null && User.HasClaim(c => c.Type == "HasStartedExperiment" && c.Value == false.ToString())) {
+                            <a href="/experiment/start">
+                                <li class="@(currentUrl == "/experiment/start" ? "current-page" : "")">start experiment</li>
                             </a>
                         }
 
