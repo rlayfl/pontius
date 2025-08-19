@@ -45,7 +45,12 @@ namespace Pontius.Controllers
 
             HttpContext.User = principal;
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("ExperimentEnded", "Experiment");
+        }
+
+        public IActionResult ExperimentEnded()
+        {
+            return View();
         }
 
 
@@ -58,11 +63,9 @@ namespace Pontius.Controllers
         {
             return View();
         }
-
-        // In this software we are treating an experiment as a user account
-        // Starting an experiment will "log in" and start a session
+       
         [HttpGet]
-        [RedirectIfAuthenticated]
+        [RedirectIfExperimentHasStarted]
         public IActionResult Start()
         {
             return View();
