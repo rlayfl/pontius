@@ -1,4 +1,14 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿//Log clicks
 
-// Write your JavaScript code.
+let clickCount = 0;
+
+document.addEventListener("click", function () {
+    clickCount++;
+
+    // Send the count to the server
+    fetch('/statistics/logClick', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ count: 1 }) // just log one click at a time
+    });
+});
