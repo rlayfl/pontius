@@ -59,6 +59,11 @@ namespace Pontius.Controllers
             return View();
         }
 
+        public IActionResult InProgress()
+        {
+            return View();
+        }
+
         public IActionResult Statistics()
         {
             return View();

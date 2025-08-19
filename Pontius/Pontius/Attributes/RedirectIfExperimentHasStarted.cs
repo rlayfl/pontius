@@ -20,12 +20,12 @@ public class RedirectIfExperimentHasStarted : ActionFilterAttribute
         var user = context.HttpContext.User;
         if (user?.Identity?.IsAuthenticated == true)
         {
-            var hasStartedTestClaim = user.FindFirst("HasExperimentStarted");
+            var hasStartedTestClaim = user.FindFirst("HasStartedExperiment");
             if (hasStartedTestClaim != null &&
                 bool.TryParse(hasStartedTestClaim.Value, out var hasStarted) &&
                 hasStarted)
             {
-                context.Result = new RedirectToActionResult("test", "experiment", null);
+                context.Result = new RedirectToActionResult("inProgress", "experiment", null);
                 return;
             }
         }

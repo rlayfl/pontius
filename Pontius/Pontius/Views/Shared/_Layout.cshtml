@@ -64,7 +64,7 @@
                             </a>
                         }
 
-                        @if (User != null && User.HasClaim(c => c.Type == "HasStartedExperiment" && c.Value == "true"))
+                        @if (User != null && User.HasClaim(c => c.Type == "HasStartedExperiment" && c.Value == true.ToString()))
                         {
                             <a href="/experiment/end">
                                 <li class="danger">end experiment</li>
