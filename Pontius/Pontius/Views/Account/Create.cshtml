@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<form id="createAccountForm" onsubmit="createAccount(); return false;">
+
+    <div class="form-group">
+        <label for="uniqueIdentifier">Choose a Unique Identifier</label>
+        <input type="text" class="form-control" id="uniqueIdentifier" name="uniqueIdentifier" required />
+
+        <label for="password">Choose a Password</label>
+        <input type="password" class="form-control" id="password" name="password" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Research Account</button>
+
+</form>
+
+<script src="/js/account/create.js"></script>

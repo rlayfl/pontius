@@ -53,11 +53,23 @@
                             <li class="@(currentUrl == "/experiment/statistics" ? "current-page" : "")">statistics</li>
                         </a>
 
+                        @if (User?.Identity?.IsAuthenticated != true) {
+                            <a href="/account/login">
+                                <li class="@(currentUrl == "/account/login" ? "current-page" : "")">login</li>
+                            </a>
+                            <a href="/account/create">
+                                <li class="@(currentUrl == "/account/create" ? "current-page" : "")">create research account</li>
+                            </a>
+                        }
 
                         @if (User?.Identity?.IsAuthenticated == true)
                         {
                             <a href="/experiment/end">
                                 <li class="danger">end experiment</li>
+                            </a>
+
+                            <a href="/account/logout">
+                                <li class="danger">logout</li>
                             </a>
                         }
                     </ul>

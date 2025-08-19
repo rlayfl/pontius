@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+<form id="loginForm" onsubmit="login(); return false;">
+
+    <div class="form-group"></div>
+        <label for="uniqueIdentifier">Unique Identifier</label>
+        <input type="text" class="form-control" id="uniqueIdentifier" name="uniqueIdentifier" required />
+
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" required />
+        <button type="submit" class="btn btn-primary">Login</button>
+    </div>
+
+    
+
+</form>
+
+<script src="/js/account/login.js"></script>

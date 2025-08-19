@@ -26,18 +26,24 @@ namespace Pontius.Controllers
         [HttpGet]
         public async Task<IActionResult> End()
         {
-            // If you use Session anywhere, this is fine. Otherwise remove it.
-            HttpContext.Session.Clear();
 
-            // Optional: only delete auth cookie to avoid nuking consent/antiforgery/TempData
-            // Response.Cookies.Delete(".MyApp.Auth"); // if you set a custom name
-            // Otherwise just sign out:
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.NameIdentifier, User.Identity?.Name ?? string.Empty),
+                new(ClaimTypes.Name, User.Identity?.Name ?? string.Empty),
+                new(ClaimTypes.Role, "Legionnaire"),
+                new("HasStartedExperiment", false.ToString()),
+                new("ExperimentType", string.Empty),
+                new("HasStartedTest", false.ToString())
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-            // Cache-busting to avoid back-button showing private pages
-            Response.Headers.CacheControl = "no-store, no-cache, must-revalidate";
-            Response.Headers.Pragma = "no-cache";
-            Response.Headers.Expires = "0";
+            HttpContext.User = principal;
 
             return RedirectToAction("Index", "Home");
         }
@@ -89,6 +95,7 @@ namespace Pontius.Controllers
                     new(ClaimTypes.NameIdentifier, debugUsername),
                     new(ClaimTypes.Name, debugUsername),
                     new(ClaimTypes.Role, "Legionnaire"),
+                    new("HasStartedExperiment", true.ToString()),
                     new("ExperimentType", experimentType.ToString()),
                     new("HasStartedTest", false.ToString())
                 };
