@@ -19,8 +19,8 @@ namespace Pontius.Controllers
 
         public ExperimentController(ILogger<HomeController> logger)
         {
-            _logger = logger;
             _firebaseExperimentsTableEndpoint = $"{_firebaseDatabaseEndpoint}experiments.json";
+            _logger = logger;
         }
 
         [HttpGet]
@@ -94,9 +94,9 @@ namespace Pontius.Controllers
             var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), System.Text.Encoding.UTF8, "application/json");
 
             using var httpClient = new HttpClient();
-            var registerResponse = await httpClient.PostAsync(_firebaseExperimentsTableEndpoint, content);
+            var startExperimentResponse = await httpClient.PostAsync(_firebaseExperimentsTableEndpoint, content);
 
-            if (registerResponse.IsSuccessStatusCode)
+            if (startExperimentResponse.IsSuccessStatusCode)
             {
                 var claims = new List<Claim>
                 {
