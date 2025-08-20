@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews(o =>
 {
     o.Filters.Add<RedirectIfTestHasStarted>();
+    o.Filters.Add<LogPageVisitToFirebase>();
 });
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
