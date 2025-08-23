@@ -2,10 +2,14 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-public class RedirectIfExperimentHasStarted : ActionFilterAttribute
+public class RedirectIfExperimentHasStartedAndTestHasNOTStarted : ActionFilterAttribute
 {
     public override void OnActionExecuting(ActionExecutingContext context)
     {
+        //Skip this filter
+        if (context.ActionDescriptor.EndpointMetadata.OfType<SkipGlobalFiltersAttribute>().Any())
+            return;
+
         var routeValues = context.RouteData.Values;
         var controller = routeValues["controller"]?.ToString();
         var action = routeValues["action"]?.ToString();
@@ -19,10 +23,15 @@ public class RedirectIfExperimentHasStarted : ActionFilterAttribute
         var user = context.HttpContext.User;
         if (user?.Identity?.IsAuthenticated == true)
         {
-            var hasStartedTestClaim = user.FindFirst("HasStartedExperiment");
-            if (hasStartedTestClaim != null &&
-                bool.TryParse(hasStartedTestClaim.Value, out var hasStarted) &&
-                hasStarted)
+            var hasStartedExperimentClaim = user.FindFirst("HasStartedExperiment");
+            var hasStartedTestClaim = user.FindFirst("HasStartedTest");
+
+            if (hasStartedExperimentClaim != null &&
+                bool.TryParse(hasStartedExperimentClaim.Value, out var hasStartedExperiment) &&
+                hasStartedExperiment &&
+                (hasStartedTestClaim == null ||
+                 !bool.TryParse(hasStartedTestClaim.Value, out var hasStartedTest) ||
+                 !hasStartedTest))
             {
                 context.Result = new RedirectToActionResult("overview", "buoys", null);
                 return;

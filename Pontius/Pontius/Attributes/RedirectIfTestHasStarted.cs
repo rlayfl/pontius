@@ -6,6 +6,10 @@ public class RedirectIfTestHasStarted : ActionFilterAttribute
 {
     public override void OnActionExecuting(ActionExecutingContext context)
     {
+        //Skip this filter
+        if (context.ActionDescriptor.EndpointMetadata.OfType<SkipGlobalFiltersAttribute>().Any())
+            return;
+
         var routeValues = context.RouteData.Values;
         var controller = routeValues["controller"]?.ToString();
         var action = routeValues["action"]?.ToString();

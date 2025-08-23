@@ -12,6 +12,10 @@ public class LogPageVisitToFirebase : IAsyncActionFilter
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
+        //Skip this filter
+        if (context.ActionDescriptor.EndpointMetadata.OfType<SkipGlobalFiltersAttribute>().Any())
+            return;
+
         // Always execute the action
         await next();
 

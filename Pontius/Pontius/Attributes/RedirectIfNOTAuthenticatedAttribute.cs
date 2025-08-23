@@ -6,6 +6,10 @@ public class RedirectIfNOTAuthenticatedAttribute : ActionFilterAttribute
 {
     public override void OnActionExecuting(ActionExecutingContext context)
     {
+        //Skip this filter
+        if (context.ActionDescriptor.EndpointMetadata.OfType<SkipGlobalFiltersAttribute>().Any())
+            return;
+
         var user = context.HttpContext.User;
 
         if (user?.Identity == null || !user.Identity.IsAuthenticated)

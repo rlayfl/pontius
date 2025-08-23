@@ -104,7 +104,7 @@ namespace Pontius.Controllers
                     new(ClaimTypes.Role, "Legionnaire"),
                     new("HasStartedExperiment", true.ToString()),
                     new("ExperimentType", experimentType.ToString()),
-                    new("HasStartedTest", false.ToString())
+                    //new("HasStartedTest", false.ToString())
                 };
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -119,15 +119,23 @@ namespace Pontius.Controllers
         }
 
         [HttpGet]
-        public void SetTestHasStarted()
+        public async Task<IActionResult> SetTestHasStarted()
         {
-            var current = User as ClaimsPrincipal;
-            if (current?.Identity is ClaimsIdentity currentIdentity)
-            {
-                var claims = currentIdentity.Claims.ToList();
-                claims.RemoveAll(c => c.Type == "HasStartedTest");
-                claims.Add(new Claim("HasStartedTest", bool.TrueString));
-            }
+            if (User.Identity is not ClaimsIdentity currentIdentity)
+                return Unauthorized();
+
+            var claims = currentIdentity.Claims.ToList();
+            claims.RemoveAll(c => c.Type == "HasStartedTest");
+            claims.Add(new Claim("HasStartedTest", bool.TrueString));
+
+            var newIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var newPrincipal = new ClaimsPrincipal(newIdentity);
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, newPrincipal);
+            HttpContext.User = newPrincipal;
+
+            return Json(new { success = true });
         }
 
         [HttpGet]

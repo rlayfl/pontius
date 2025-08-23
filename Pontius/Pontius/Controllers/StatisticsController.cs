@@ -24,7 +24,7 @@ namespace Pontius.Controllers
         }
 
         
-
+        [SkipGlobalFilters]
         [HttpPost]
         public async Task<IActionResult> LogClick()
         {
