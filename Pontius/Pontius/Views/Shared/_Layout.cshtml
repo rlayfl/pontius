@@ -36,6 +36,20 @@
             <div class="row">
                 <div class="col-3 offset-7">
                     @{
+
+                        if (User?.Identity?.IsAuthenticated == true)
+                        {
+                            <div class="mb-3">
+                                <strong>User Claims:</strong>
+                                <ul>
+                                    @foreach (var claim in User.Claims)
+                                    {
+                                        <li>@claim.Type: @claim.Value</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+
                         var currentUrl = Context.Request.Path.Value?.ToLower();
                     }
 

@@ -1,17 +1,9 @@
 @{
     ViewData["Title"] = "Experiment - Start";
 
-    var experimentType = User?.FindFirst("experimenttype")?.Value;
+    
 
-    var experimentMessages = new Dictionary<string, string>
-    {
-        { "InformationOverload", "You have selected Information Overload experiment." },
-        { "Complexity", "You have selected Complexity experiment." },
-        { "TimePressure", "You have selected Time Pressure experiment." },
-        { "Uncertainty", "You have selected Uncertainty experiment." },
-        { "Competition", "You have selected Competition experiment." },
-        { "Risk", "You have selected Risk experiment." }
-    };
+    
 
     var buoyTypes = new Dictionary<string, (string Description, string ImageUrl)>
     {
@@ -28,9 +20,7 @@
     };
 }
 
-<div class="alert @(experimentMessages.ContainsKey(experimentType ?? "") ? "alert-info" : "alert-secondary")">
-    @experimentMessages.GetValueOrDefault(experimentType ?? "", "Unknown experiment type selected.")
-</div>
+
 
 <h4>Buoy Types</h4>
 <ul class="list-unstyled">
