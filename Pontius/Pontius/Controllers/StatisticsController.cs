@@ -23,6 +23,8 @@ namespace Pontius.Controllers
             return View();
         }
 
+        
+
         [HttpPost]
         public async Task<IActionResult> LogClick()
         {
