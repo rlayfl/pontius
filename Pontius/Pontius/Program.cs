@@ -4,7 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews(o =>
 {
-    o.Filters.Add<RedirectIfTestHasStarted>();
+    // o.Filters.Add<RedirectIfExperimentHasStarted>();
+    // o.Filters.Add<RedirectIfTestHasStarted>();
     o.Filters.Add<LogPageVisitToFirebase>();
 });
 

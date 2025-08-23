@@ -13,9 +13,8 @@ public class LogPageVisitToFirebase : IAsyncActionFilter
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         // Always execute the action
-        var executedContext = await next();
+        await next();
 
-        // Skip logging if this is the statistics/logClick endpoint
         var requestPath = context.HttpContext.Request.Path.Value?.Trim('/').ToLowerInvariant();
         if (requestPath == "statistics/logclick")
         {

@@ -70,7 +70,6 @@ namespace Pontius.Controllers
         }
        
         [HttpGet]
-        [RedirectIfExperimentHasStarted]
         public IActionResult Start()
         {
             return View();
@@ -117,6 +116,18 @@ namespace Pontius.Controllers
             }
 
             return Json(new { success = false, message = "Something went wrong DEBUG." });
+        }
+
+        [HttpGet]
+        public void SetTestHasStarted()
+        {
+            var current = User as ClaimsPrincipal;
+            if (current?.Identity is ClaimsIdentity currentIdentity)
+            {
+                var claims = currentIdentity.Claims.ToList();
+                claims.RemoveAll(c => c.Type == "HasStartedTest");
+                claims.Add(new Claim("HasStartedTest", bool.TrueString));
+            }
         }
 
         [HttpGet]

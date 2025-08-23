@@ -1,15 +1,21 @@
 async function startTest() {
 
-    alert("Helo")
-
     const form = document.getElementById("startTestForm");
     const formData = new FormData(form);
 
     const payload = Object.fromEntries(formData.entries());
 
+    await fetch('/experiment/SetTestHasStarted', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+
     try {
         const response = await fetch('/experiment/test', {
-            method: 'POST',
+            method: 'GET',
             credentials: 'include',
             headers: {
             'Content-Type': 'application/json'
@@ -19,7 +25,6 @@ async function startTest() {
 
         if (!response.ok) {
             console.error('Failed to register. Status:', response.status);
-            // Optionally show message to user
             return;
         }
 

@@ -9,9 +9,8 @@ public class RedirectIfExperimentHasStarted : ActionFilterAttribute
         var routeValues = context.RouteData.Values;
         var controller = routeValues["controller"]?.ToString();
         var action = routeValues["action"]?.ToString();
-        if (string.Equals(controller, "experiment", StringComparison.OrdinalIgnoreCase) &&
-            (string.Equals(action, "test", StringComparison.OrdinalIgnoreCase) ||
-             string.Equals(action, "end", StringComparison.OrdinalIgnoreCase)))
+        if (string.Equals(controller, "buoys", StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(action, "overview", StringComparison.OrdinalIgnoreCase))
         {
             base.OnActionExecuting(context);
             return;
@@ -25,7 +24,7 @@ public class RedirectIfExperimentHasStarted : ActionFilterAttribute
                 bool.TryParse(hasStartedTestClaim.Value, out var hasStarted) &&
                 hasStarted)
             {
-                context.Result = new RedirectToActionResult("inProgress", "experiment", null);
+                context.Result = new RedirectToActionResult("overview", "buoys", null);
                 return;
             }
         }
