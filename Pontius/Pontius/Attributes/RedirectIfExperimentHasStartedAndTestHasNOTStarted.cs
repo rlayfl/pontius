@@ -26,16 +26,15 @@ public class RedirectIfExperimentHasStartedAndTestHasNOTStarted : ActionFilterAt
             var hasStartedExperimentClaim = user.FindFirst("HasStartedExperiment");
             var hasStartedTestClaim = user.FindFirst("HasStartedTest");
 
-            if (hasStartedExperimentClaim != null &&
-                bool.TryParse(hasStartedExperimentClaim.Value, out var hasStartedExperiment) &&
-                hasStartedExperiment &&
-                (hasStartedTestClaim == null ||
-                 !bool.TryParse(hasStartedTestClaim.Value, out var hasStartedTest) ||
-                 !hasStartedTest))
+            bool HasTrue(string? s) => string.Equals(s?.Trim(), "true", StringComparison.OrdinalIgnoreCase);
+
+            if (HasTrue(hasStartedExperimentClaim?.Value) &&
+                !HasTrue(hasStartedTestClaim?.Value))
             {
                 context.Result = new RedirectToActionResult("overview", "buoys", null);
                 return;
             }
+
         }
 
         base.OnActionExecuting(context);

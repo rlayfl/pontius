@@ -15,7 +15,7 @@ async function startTest() {
 
     try {
         const response = await fetch('/experiment/test', {
-            method: 'GET',
+            method: 'POST',
             credentials: 'include',
             headers: {
             'Content-Type': 'application/json'

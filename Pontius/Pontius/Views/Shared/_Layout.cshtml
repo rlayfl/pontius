@@ -84,8 +84,14 @@
                             </a>
                         }
 
+
+
                         @if (User != null && User.HasClaim(c => c.Type == "HasStartedExperiment" && c.Value == true.ToString()))
                         {
+                            <a href="/buoys/overview">
+                                <li class="">go to current experiment</li>
+                            </a>
+
                             <a href="/experiment/end">
                                 <li class="danger">end experiment</li>
                             </a>
