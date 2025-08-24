@@ -15,7 +15,9 @@ public class RedirectIfTestHasStarted : ActionFilterAttribute
         var action = routeValues["action"]?.ToString();
         if (string.Equals(controller, "experiment", StringComparison.OrdinalIgnoreCase) &&
             (string.Equals(action, "test", StringComparison.OrdinalIgnoreCase) ||
-             string.Equals(action, "end", StringComparison.OrdinalIgnoreCase)))
+             string.Equals(action, "end", StringComparison.OrdinalIgnoreCase)) ||
+            (string.Equals(controller, "account", StringComparison.OrdinalIgnoreCase) &&
+             string.Equals(action, "logout", StringComparison.OrdinalIgnoreCase)))
         {
             base.OnActionExecuting(context);
             return;

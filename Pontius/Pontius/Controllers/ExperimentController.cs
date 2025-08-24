@@ -97,20 +97,24 @@ namespace Pontius.Controllers
 
             if (startExperimentResponse.IsSuccessStatusCode)
             {
-                var claims = new List<Claim>
-                {
-                    new(ClaimTypes.NameIdentifier, debugUsername),
-                    new(ClaimTypes.Name, debugUsername),
-                    new(ClaimTypes.Role, "Legionnaire"),
-                    new("HasStartedExperiment", true.ToString()),
-                    new("ExperimentType", experimentType.ToString()),
-                    //new("HasStartedTest", false.ToString())
-                };
+                var current = User as ClaimsPrincipal;
+                if (current?.Identity is not ClaimsIdentity currentIdentity)
+                    return Unauthorized();
 
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal = new ClaimsPrincipal(identity);
+                var claims = currentIdentity.Claims.ToList();
+                claims.RemoveAll(c => c.Type == "HasStartedExperiment");
+                claims.Add(new Claim("HasStartedExperiment", true.ToString()));
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                claims.RemoveAll(c => c.Type == "ExperimentType");
+                claims.Add(new Claim("ExperimentType", experimentType.ToString()));
+
+                var newIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var newPrincipal = new ClaimsPrincipal(newIdentity);
+
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, newPrincipal);
+
+                HttpContext.User = newPrincipal;
 
                 return Json(new { success = true, redirectUrl = Url.Action("overview", "buoys") });
             }

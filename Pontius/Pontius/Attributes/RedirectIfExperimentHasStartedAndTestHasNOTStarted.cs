@@ -13,8 +13,15 @@ public class RedirectIfExperimentHasStartedAndTestHasNOTStarted : ActionFilterAt
         var routeValues = context.RouteData.Values;
         var controller = routeValues["controller"]?.ToString();
         var action = routeValues["action"]?.ToString();
-        if (string.Equals(controller, "buoys", StringComparison.OrdinalIgnoreCase) &&
-            string.Equals(action, "overview", StringComparison.OrdinalIgnoreCase))
+        // Exclude buoys/overview, account/logout, experiment/end, and experiment/setTestHasStarted
+        if ((string.Equals(controller, "buoys", StringComparison.OrdinalIgnoreCase) &&
+             string.Equals(action, "overview", StringComparison.OrdinalIgnoreCase)) ||
+            (string.Equals(controller, "account", StringComparison.OrdinalIgnoreCase) &&
+             string.Equals(action, "logout", StringComparison.OrdinalIgnoreCase)) ||
+            (string.Equals(controller, "experiment", StringComparison.OrdinalIgnoreCase) &&
+             string.Equals(action, "end", StringComparison.OrdinalIgnoreCase)) ||
+            (string.Equals(controller, "experiment", StringComparison.OrdinalIgnoreCase) &&
+             string.Equals(action, "setTestHasStarted", StringComparison.OrdinalIgnoreCase)))
         {
             base.OnActionExecuting(context);
             return;
