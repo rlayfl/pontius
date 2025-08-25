@@ -2,6 +2,36 @@
     ViewData["Title"] = "Experiment - Start";
 }
 
-TEST
+@{
+    var experimentTypeClaim = User.Claims.FirstOrDefault(c => c.Type == "ExperimentType")?.Value;
+
+    
+}
+<p>Experiment Type: @experimentTypeClaim</p>
+
+@switch (experimentTypeClaim)
+{
+    case "InformationOverload":
+        <p>You are running the Information Overload experiment.</p>
+        break;
+    case "Complexity":
+        <p>You are running the Complexity experiment.</p>
+        break;
+    case "TimePressure":
+        <p>You are running the Time Pressure experiment.</p>
+        break;
+    case "Uncertainty":
+        <p>You are running the Uncertainty experiment.</p>
+        break;
+    case "Competition":
+        <p>You are running the Competition experiment.</p>
+        break;
+    case "Risk":
+        <p>You are running the Risk experiment.</p>
+        break;
+    default:
+        <p>Unknown experiment type.</p>
+        break;
+}
 
 <a href="/experiment/test">Submit Test</a>
