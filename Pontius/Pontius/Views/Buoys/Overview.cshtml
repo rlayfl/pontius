@@ -1,38 +1,505 @@
 @{
     ViewData["Title"] = "Experiment - Start";
-
-    
-
-    
-
     var buoyTypes = new Dictionary<string, (string Description, string ImageUrl)>
-    {
-        { "Cardinal Mark North", ("Indicates safe water to the north.", "/images/buoys/cmn.png") },
-        { "Cardinal Mark East", ("Indicates safe water to the east.", "/images/buoys/cme.png") },
-        { "Cardinal Mark South", ("Indicates safe water to the south.", "/images/buoys/cms.png") },
-        { "Cardinal Mark West", ("Indicates safe water to the west.", "/images/buoys/cmw.png") },
-        { "Emergency Wreck", ("Marks a newly discovered wreck.", "/images/buoys/w.png") },
-        { "Isolated Danger", ("Marks an isolated danger with safe water all around.", "/images/buoys/id.png") },
-        { "Port Lateral", ("Marks the port (left) side of a channel.", "/images/buoys/port.png") },
-        { "Starboard Lateral", ("Marks the starboard (right) side of a channel.", "/images/buoys/starboard.png") },
-        { "Safe Water", ("Indicates there is safe water all around.", "/images/buoys/sw.png") },
-        { "Special Mark", ("Indicates a special area or feature.", "/images/buoys/s.png") }
-    };
+{
+{ "Cardinal Mark North", ("Indicates safe water to the north.", "/images/buoys/cmn.png") },
+{ "Cardinal Mark East", ("Indicates safe water to the east.", "/images/buoys/cme.png") },
+{ "Cardinal Mark South", ("Indicates safe water to the south.", "/images/buoys/cms.png") },
+{ "Cardinal Mark West", ("Indicates safe water to the west.", "/images/buoys/cmw.png") },
+{ "Emergency Wreck", ("Marks a newly discovered wreck.", "/images/buoys/w.png") },
+{ "Isolated Danger", ("Marks an isolated danger with safe water all around.", "/images/buoys/id.png") },
+{ "Port Lateral", ("Marks the port (left) side of a channel.", "/images/buoys/port.png") },
+{ "Starboard Lateral", ("Marks the starboard (right) side of a channel.", "/images/buoys/starboard.png") },
+{ "Safe Water", ("Indicates there is safe water all around.", "/images/buoys/sw.png") },
+{ "Special Mark", ("Indicates a special area or feature.", "/images/buoys/s.png") }
+};
+}
+
+@{
+    var experimentTypeClaim = User.Claims.FirstOrDefault(c => c.Type == "ExperimentType")?.Value;
+}
+<p>Experiment Type: @experimentTypeClaim</p>
+
+@switch (experimentTypeClaim)
+{
+    case "InformationOverload":
+        <p>You are running the Information Overload experiment.</p>
+        break;
+    case "Complexity":
+        <p>You are running the Complexity experiment.</p>
+        break;
+    case "TimePressure":
+        <p>You are running the Time Pressure experiment.</p>
+        break;
+    case "Uncertainty":
+        <p>You are running the Uncertainty experiment.</p>
+        break;
+    case "Competition":
+        <p>You are running the Competition experiment.</p>
+        break;
+    case "Risk":
+        <p>You are running the Risk experiment.</p>
+        break;
+    default:
+        <p>Unknown experiment type.</p>
+        break;
 }
 
 
+<!-- Information Overload -->
 
-<h4>Buoy Types</h4>
-<ul class="list-unstyled">
-    @foreach (var buoy in buoyTypes)
+@{
+
+    if (experimentTypeClaim == "InformationOverload")
     {
-        <li class="mb-3">
-            <strong>@buoy.Key</strong>: @buoy.Value.Description
-            <br />
-            <img src="@buoy.Value.ImageUrl" alt="@buoy.Key" class="buoy-img" />
-        </li>
+        <!-- Cardinal Mark East -->
+        <div class="accordion" id="cardinalMarkEastAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingEastOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEastOne"
+                        aria-expanded="true" aria-controls="collapseEastOne">
+                        <img src="@buoyTypes["Cardinal Mark East"].ImageUrl" alt="Cardinal Mark East" class="buoy-img me-2" />
+                        What is the Cardinal Mark East?
+                    </button>
+                </h2>
+                <div id="collapseEastOne" class="accordion-collapse collapse show" aria-labelledby="headingEastOne"
+                    data-bs-parent="#cardinalMarkEastAccordion">
+                    <div class="accordion-body">
+                        The Cardinal Mark East indicates that safe water lies to the east of the mark. Mariners should pass to
+                        the east side to avoid danger.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingEastTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseEastTwo" aria-expanded="false" aria-controls="collapseEastTwo">
+                        How does this mark work?
+                    </button>
+                </h2>
+                <div id="collapseEastTwo" class="accordion-collapse collapse" aria-labelledby="headingEastTwo"
+                    data-bs-parent="#cardinalMarkEastAccordion">
+                    <div class="accordion-body">
+                        The Cardinal Mark East is black with a single yellow band and has two black cones pointing away from
+                        each other (top up, bottom down).
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingEastThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseEastThree" aria-expanded="false" aria-controls="collapseEastThree">
+                        Tips for Identification
+                    </button>
+                </h2>
+                <div id="collapseEastThree" class="accordion-collapse collapse" aria-labelledby="headingEastThree"
+                    data-bs-parent="#cardinalMarkEastAccordion">
+                    <div class="accordion-body">
+                        Look for the cones pointing apart and the black-yellow-black color pattern. Always pass to the east
+                        side.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cardinal Mark South -->
+        <div class="accordion" id="cardinalMarkSouthAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSouthOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSouthOne"
+                        aria-expanded="true" aria-controls="collapseSouthOne">
+                        <img src="@buoyTypes["Cardinal Mark South"].ImageUrl" alt="Cardinal Mark South" class="buoy-img me-2" />
+                        What is the Cardinal Mark South?
+                    </button>
+                </h2>
+                <div id="collapseSouthOne" class="accordion-collapse collapse show" aria-labelledby="headingSouthOne"
+                    data-bs-parent="#cardinalMarkSouthAccordion">
+                    <div class="accordion-body">
+                        The Cardinal Mark South indicates that safe water lies to the south of the mark. Mariners should pass to
+                        the south side to avoid danger.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSouthTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseSouthTwo" aria-expanded="false" aria-controls="collapseSouthTwo">
+                        How does this mark work?
+                    </button>
+                </h2>
+                <div id="collapseSouthTwo" class="accordion-collapse collapse" aria-labelledby="headingSouthTwo"
+                    data-bs-parent="#cardinalMarkSouthAccordion">
+                    <div class="accordion-body">
+                        The Cardinal Mark South is yellow with a single black band and has two black cones pointing downwards.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSouthThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseSouthThree" aria-expanded="false" aria-controls="collapseSouthThree">
+                        Tips for Identification
+                    </button>
+                </h2>
+                <div id="collapseSouthThree" class="accordion-collapse collapse" aria-labelledby="headingSouthThree"
+                    data-bs-parent="#cardinalMarkSouthAccordion">
+                    <div class="accordion-body">
+                        Look for the two cones pointing downward and the yellow-black-yellow color scheme. Always pass to the
+                        south.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cardinal Mark West -->
+        <div class="accordion" id="cardinalMarkWestAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingWestOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWestOne"
+                        aria-expanded="true" aria-controls="collapseWestOne">
+                        <img src="@buoyTypes["Cardinal Mark West"].ImageUrl" alt="Cardinal Mark West" class="buoy-img me-2" />
+                        What is the Cardinal Mark West?
+                    </button>
+                </h2>
+                <div id="collapseWestOne" class="accordion-collapse collapse show" aria-labelledby="headingWestOne"
+                    data-bs-parent="#cardinalMarkWestAccordion">
+                    <div class="accordion-body">
+                        The Cardinal Mark West indicates that safe water lies to the west of the mark. Mariners should pass to
+                        the west side to avoid danger.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingWestTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseWestTwo" aria-expanded="false" aria-controls="collapseWestTwo">
+                        How does this mark work?
+                    </button>
+                </h2>
+                <div id="collapseWestTwo" class="accordion-collapse collapse" aria-labelledby="headingWestTwo"
+                    data-bs-parent="#cardinalMarkWestAccordion">
+                    <div class="accordion-body">
+                        The Cardinal Mark West is yellow with a single black band in the middle and has two cones pointing
+                        toward each other.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingWestThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseWestThree" aria-expanded="false" aria-controls="collapseWestThree">
+                        Tips for Identification
+                    </button>
+                </h2>
+                <div id="collapseWestThree" class="accordion-collapse collapse" aria-labelledby="headingWestThree"
+                    data-bs-parent="#cardinalMarkWestAccordion">
+                    <div class="accordion-body">
+                        Look for the cones pointing together and the yellow-black-yellow pattern. Always pass to the west.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Emergency Wreck Mark -->
+        <div class="accordion" id="emergencyWreckAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingWreckOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWreckOne"
+                        aria-expanded="true" aria-controls="collapseWreckOne">
+                        <img src="@buoyTypes["Emergency Wreck"].ImageUrl" alt="Emergency Wreck" class="buoy-img me-2" />
+                        What is the Emergency Wreck Mark?
+                    </button>
+                </h2>
+                <div id="collapseWreckOne" class="accordion-collapse collapse show" aria-labelledby="headingWreckOne"
+                    data-bs-parent="#emergencyWreckAccordion">
+                    <div class="accordion-body">
+                        The Emergency Wreck Mark is used to indicate a newly discovered wreck. It warns mariners of immediate
+                        hazards.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingWreckTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseWreckTwo" aria-expanded="false" aria-controls="collapseWreckTwo">
+                        How does this mark work?
+                    </button>
+                </h2>
+                <div id="collapseWreckTwo" class="accordion-collapse collapse" aria-labelledby="headingWreckTwo"
+                    data-bs-parent="#emergencyWreckAccordion">
+                    <div class="accordion-body">
+                        The Emergency Wreck Mark is blue and yellow vertical stripes with a yellow cross topmark. It may be
+                        fitted with alternating blue and yellow lights.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingWreckThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseWreckThree" aria-expanded="false" aria-controls="collapseWreckThree">
+                        Tips for Identification
+                    </button>
+                </h2>
+                <div id="collapseWreckThree" class="accordion-collapse collapse" aria-labelledby="headingWreckThree"
+                    data-bs-parent="#emergencyWreckAccordion">
+                    <div class="accordion-body">
+                        Look for the blue and yellow stripes and the yellow cross topmark. Treat with extreme caution.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Isolated Danger Mark -->
+        <div class="accordion" id="isolatedDangerAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingIDOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIDOne"
+                        aria-expanded="true" aria-controls="collapseIDOne">
+                        <img src="@buoyTypes["Isolated Danger"].ImageUrl" alt="Isolated Danger" class="buoy-img me-2" />
+                        What is the Isolated Danger Mark?
+                    </button>
+                </h2>
+                <div id="collapseIDOne" class="accordion-collapse collapse show" aria-labelledby="headingIDOne"
+                    data-bs-parent="#isolatedDangerAccordion">
+                    <div class="accordion-body">
+                        The Isolated Danger Mark indicates an isolated hazard with safe water all around. Mariners should keep
+                        clear of the mark itself.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingIDTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseIDTwo" aria-expanded="false" aria-controls="collapseIDTwo">
+                        How does this mark work?
+                    </button>
+                </h2>
+                <div id="collapseIDTwo" class="accordion-collapse collapse" aria-labelledby="headingIDTwo"
+                    data-bs-parent="#isolatedDangerAccordion">
+                    <div class="accordion-body">
+                        The Isolated Danger Mark is black with one or more red horizontal bands and has two black spheres as a
+                        topmark.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingIDThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseIDThree" aria-expanded="false" aria-controls="collapseIDThree">
+                        Tips for Identification
+                    </button>
+                </h2>
+                <div id="collapseIDThree" class="accordion-collapse collapse" aria-labelledby="headingIDThree"
+                    data-bs-parent="#isolatedDangerAccordion">
+                    <div class="accordion-body">
+                        Look for the two black balls topmark. This mark shows a danger directly beneath it, but safe water in
+                        all directions.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Port Lateral Mark -->
+        <div class="accordion" id="portLateralAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingPortOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePortOne"
+                        aria-expanded="true" aria-controls="collapsePortOne">
+                        <img src="@buoyTypes["Port Lateral"].ImageUrl" alt="Port Lateral" class="buoy-img me-2" />
+                        What is the Port Lateral Mark?
+                    </button>
+                </h2>
+                <div id="collapsePortOne" class="accordion-collapse collapse show" aria-labelledby="headingPortOne"
+                    data-bs-parent="#portLateralAccordion">
+                    <div class="accordion-body">
+                        The Port Lateral Mark indicates the port (left) side of a channel when heading upstream or entering from
+                        seaward.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingPortTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapsePortTwo" aria-expanded="false" aria-controls="collapsePortTwo">
+                        How does this mark work?
+                    </button>
+                </h2>
+                <div id="collapsePortTwo" class="accordion-collapse collapse" aria-labelledby="headingPortTwo"
+                    data-bs-parent="#portLateralAccordion">
+                    <div class="accordion-body">
+                        The Port Lateral Mark is red in IALA Region A (Europe, Africa, most of Asia) and green in IALA Region B
+                        (Americas, Japan, Korea, Philippines).
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingPortThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapsePortThree" aria-expanded="false" aria-controls="collapsePortThree">
+                        Tips for Identification
+                    </button>
+                </h2>
+                <div id="collapsePortThree" class="accordion-collapse collapse" aria-labelledby="headingPortThree"
+                    data-bs-parent="#portLateralAccordion">
+                    <div class="accordion-body">
+                        Check your navigation region (IALA A or B). Port side marks are typically can-shaped.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Starboard Lateral Mark -->
+        <div class="accordion" id="starboardLateralAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingStarboardOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseStarboardOne" aria-expanded="true" aria-controls="collapseStarboardOne">
+                        <img src="@buoyTypes["Starboard Lateral"].ImageUrl" alt="Starboard Lateral" class="buoy-img me-2" />
+                        What is the Starboard Lateral Mark?
+                    </button>
+                </h2>
+                <div id="collapseStarboardOne" class="accordion-collapse collapse show" aria-labelledby="headingStarboardOne"
+                    data-bs-parent="#starboardLateralAccordion">
+                    <div class="accordion-body">
+                        The Starboard Lateral Mark indicates the starboard (right) side of a channel when heading upstream or
+                        entering from seaward.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingStarboardTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseStarboardTwo" aria-expanded="false" aria-controls="collapseStarboardTwo">
+                        How does this mark work?
+                    </button>
+                </h2>
+                <div id="collapseStarboardTwo" class="accordion-collapse collapse" aria-labelledby="headingStarboardTwo"
+                    data-bs-parent="#starboardLateralAccordion">
+                    <div class="accordion-body">
+                        The Starboard Lateral Mark is green in IALA Region A and red in IALA Region B. It is usually conical in
+                        shape.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingStarboardThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseStarboardThree" aria-expanded="false" aria-controls="collapseStarboardThree">
+                        Tips for Identification
+                    </button>
+                </h2>
+                <div id="collapseStarboardThree" class="accordion-collapse collapse" aria-labelledby="headingStarboardThree"
+                    data-bs-parent="#starboardLateralAccordion">
+                    <div class="accordion-body">
+                        Remember the saying: "Red Right Returning" (Region B). Starboard side marks are conical.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safe Water Mark -->
+        <div class="accordion" id="safeWaterAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSWOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSWOne"
+                        aria-expanded="true" aria-controls="collapseSWOne">
+                        <img src="@buoyTypes["Safe Water"].ImageUrl" alt="Safe Water" class="buoy-img me-2" />
+                        What is the Safe Water Mark?
+                    </button>
+                </h2>
+                <div id="collapseSWOne" class="accordion-collapse collapse show" aria-labelledby="headingSWOne"
+                    data-bs-parent="#safeWaterAccordion">
+                    <div class="accordion-body">
+                        The Safe Water Mark indicates that there is navigable water all around it. It is often used as a
+                        mid-channel or landfall mark.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSWTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseSWTwo" aria-expanded="false" aria-controls="collapseSWTwo">
+                        How does this mark work?
+                    </button>
+                </h2>
+                <div id="collapseSWTwo" class="accordion-collapse collapse" aria-labelledby="headingSWTwo"
+                    data-bs-parent="#safeWaterAccordion">
+                    <div class="accordion-body">
+                        The Safe Water Mark is red and white vertical stripes with a single red sphere as a topmark. Its light
+                        is a white Morse "A" (• –).
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSWThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseSWThree" aria-expanded="false" aria-controls="collapseSWThree">
+                        Tips for Identification
+                    </button>
+                </h2>
+                <div id="collapseSWThree" class="accordion-collapse collapse" aria-labelledby="headingSWThree"
+                    data-bs-parent="#safeWaterAccordion">
+                    <div class="accordion-body">
+                        Look for the red and white stripes and the single red sphere. This mark means safe passage in any
+                        direction.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Special Mark -->
+        <div class="accordion" id="specialMarkAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSOne"
+                        aria-expanded="true" aria-controls="collapseSOne">
+                        <img src="@buoyTypes["Special Mark"].ImageUrl" alt="Special Mark" class="buoy-img me-2" />
+                        What is the Special Mark?
+                    </button>
+                </h2>
+                <div id="collapseSOne" class="accordion-collapse collapse show" aria-labelledby="headingSOne"
+                    data-bs-parent="#specialMarkAccordion">
+                    <div class="accordion-body">
+                        The Special Mark indicates a special area or feature such as a spoil ground, recreation zone, or
+                        pipeline.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseSTwo" aria-expanded="false" aria-controls="collapseSTwo">
+                        How does this mark work?
+                    </button>
+                </h2>
+                <div id="collapseSTwo" class="accordion-collapse collapse" aria-labelledby="headingSTwo"
+                    data-bs-parent="#specialMarkAccordion">
+                    <div class="accordion-body">
+                        The Special Mark is yellow with a distinctive yellow X (St. Andrew’s Cross) topmark. Its light is yellow
+                        with various rhythms.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseSThree" aria-expanded="false" aria-controls="collapseSThree">
+                        Tips for Identification
+                    </button>
+                </h2>
+                <div id="collapseSThree" class="accordion-collapse collapse" aria-labelledby="headingSThree"
+                    data-bs-parent="#specialMarkAccordion">
+                    <div class="accordion-body">
+                        Look for the all-yellow color and the X-shaped topmark. Check charts to see what feature or area the
+                        mark represents.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     }
-</ul>
+
+}
 
 <form id="startTestForm" onsubmit="startTest(); return false;" class="mt-4">
     <button type="submit" class="btn btn-primary">Begin Test</button>

@@ -4,8 +4,6 @@
 
 @{
     var experimentTypeClaim = User.Claims.FirstOrDefault(c => c.Type == "ExperimentType")?.Value;
-
-    
 }
 <p>Experiment Type: @experimentTypeClaim</p>
 
