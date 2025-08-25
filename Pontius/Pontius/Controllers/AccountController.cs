@@ -5,6 +5,7 @@ using Pontius.ExperimentObjects;
 using Pontius.Models;
 using System.Diagnostics;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Pontius.Controllers
 {
@@ -14,6 +15,8 @@ namespace Pontius.Controllers
         private readonly string _firebaseApiKey;
         private readonly string _loginEndpoint;
         private readonly string _registerEndpoint;
+        private readonly string _firebaseDatabaseEndpoint = "https://pontius-b5de5-default-rtdb.europe-west1.firebasedatabase.app/";
+        private readonly string _firebaseUserAccountsTableEndpoint;
 
         private readonly ILogger<HomeController> _logger;
         private readonly IConfiguration _config;
@@ -25,6 +28,7 @@ namespace Pontius.Controllers
                             ?? throw new InvalidOperationException("Firebase:ApiKey missing");
             _loginEndpoint    = $"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={_firebaseApiKey}";
             _registerEndpoint = $"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={_firebaseApiKey}";
+            _firebaseUserAccountsTableEndpoint = $"{_firebaseDatabaseEndpoint}userAccounts.json";
             _logger = logger;
         }
 
@@ -37,13 +41,11 @@ namespace Pontius.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateAccount createAccount)
         {
-            var debugEmail = "TestEmail2@email.com";
-            var debugPassword = "TestPassword";
 
             var payload = new
             {
-                email = debugEmail,
-                password = debugPassword,
+                email = createAccount.EmailAddress,
+                password = createAccount.Password,
                 returnSecureToken = true
             };
 
@@ -56,8 +58,7 @@ namespace Pontius.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new(ClaimTypes.NameIdentifier, debugEmail),
-                    new(ClaimTypes.Name, debugEmail),
+                    new(ClaimTypes.NameIdentifier, createAccount.EmailAddress),
                     new("HasStartedExperiment", false.ToString()),
                     new("ExperimentType", string.Empty),
                     new("HasStartedTest", false.ToString())
@@ -67,6 +68,21 @@ namespace Pontius.Controllers
                 var principal = new ClaimsPrincipal(identity);
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                var responseContent = await createAccountResponse.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(responseContent);
+                var localId = doc.RootElement.GetProperty("localId").GetString();
+
+                var userAccountPayload = new
+                {
+                    localID = localId,
+                    createdTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+                };
+
+                var userAccountContent = new StringContent(JsonSerializer.Serialize(userAccountPayload), System.Text.Encoding.UTF8, "application/json");
+
+                await httpClient.PostAsync(_firebaseUserAccountsTableEndpoint, userAccountContent);
+
 
                 return Json(new { success = true, redirectUrl = Url.Action("index", "home") });
             }
