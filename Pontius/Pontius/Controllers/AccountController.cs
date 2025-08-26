@@ -99,13 +99,10 @@ namespace Pontius.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] Login login)
         {
-            var debugEmail = "TestEmail@email.com";
-            var debugPassword = "TestPassword";
-
             var payload = new
             {
-                email = debugEmail,
-                password = debugPassword,
+                email = login.EmailAddress,
+                password = login.Password,
                 returnSecureToken = true
             };
 
@@ -116,10 +113,38 @@ namespace Pontius.Controllers
 
             if (loginResponse.IsSuccessStatusCode)
             {
+                var responseContent = await loginResponse.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(responseContent);
+                var localId = doc.RootElement.GetProperty("localId").GetString();
+
+                var userAccountsResponse = await httpClient.GetAsync(_firebaseUserAccountsTableEndpoint);
+                if (userAccountsResponse.IsSuccessStatusCode)
+                {
+                    var userAccountsJson = await userAccountsResponse.Content.ReadAsStringAsync();
+                    using var userAccountsDoc = JsonDocument.Parse(userAccountsJson);
+
+                    JsonElement userAccountsRoot = userAccountsDoc.RootElement;
+                    string userAccountKey = null;
+
+                    foreach (var account in userAccountsRoot.EnumerateObject())
+                    {
+                        if (account.Value.TryGetProperty("localID", out var idElement) && idElement.GetString() == localId)
+                        {
+                            userAccountKey = account.Name;
+                            break;
+                        }
+                    }
+
+                    // You now have userAccountKey, which is the key for the user account associated with localId.
+                    // You can fetch more details if needed.
+                }
+
+
+
                 var claims = new List<Claim>
                 {
-                    new(ClaimTypes.NameIdentifier, debugEmail),
-                    new(ClaimTypes.Name, debugEmail),
+                    new(ClaimTypes.NameIdentifier, login.EmailAddress),
+                    new(ClaimTypes.Name, login.EmailAddress),
                     new("HasStartedExperiment", false.ToString()),
                     new("ExperimentType", string.Empty),
                     new("HasStartedTest", false.ToString())
@@ -129,6 +154,8 @@ namespace Pontius.Controllers
                 var principal = new ClaimsPrincipal(identity);
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+
 
                 return Json(new { success = true, redirectUrl = Url.Action("index", "home") });
             }
