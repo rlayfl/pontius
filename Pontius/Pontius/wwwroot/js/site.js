@@ -1,5 +1,4 @@
 ﻿//Log clicks
-
 let clickCount = 0;
 
 document.addEventListener("click", function () {
