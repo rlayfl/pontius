@@ -81,7 +81,9 @@ namespace Pontius.Controllers
 
             var debugUsername = "TestUsername";
             var debugPassword = "TestPassword";
-            var experimentType = GetRandomExperimentType();
+            //var experimentType = GetRandomExperimentType();
+
+            var experimentType = "InformationOverload";
 
             var payload = new
             {
