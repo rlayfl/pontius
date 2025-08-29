@@ -34,7 +34,20 @@
 
 
 
+@{
+    var index = 0;
+    foreach (var markerBuoy in Model.MarkerBuoys)
+    {
+        <img 
+            id="markerBuoy_@index"
+            src="@markerBuoy.ImageURL" 
+            class="@(index == 0 ? "current-buoy" : "d-none")" 
+        />
+        index++;
+    }
+}
 
+<button type="button" onclick="nextBuoy()">Next Buoy</button>
 
 
 

@@ -68,7 +68,7 @@ namespace Pontius.Controllers
         {
             return View();
         }
-       
+
         [HttpGet]
         public IActionResult Start()
         {
@@ -147,15 +147,52 @@ namespace Pontius.Controllers
         [HttpGet]
         public IActionResult Test()
         {
-            return View();
+            var experimentTestViewModel = new ExperimentTestViewModel();
+
+            // Try to load from session first
+            var buoyOrder = HttpContext.Session.GetString("BuoyOrder");
+
+            List<string> files;
+            if (string.IsNullOrEmpty(buoyOrder))
+            {
+                // No session order yet → shuffle and save
+                var random = new Random();
+                files = Directory.GetFiles("wwwroot/images/buoys/real/", "*.png")
+                                .OrderBy(f => random.Next())
+                                .ToList();
+
+                // Save the order in session
+                HttpContext.Session.SetString("BuoyOrder", string.Join("|", files));
+            }
+            else
+            {
+                // Load existing order from session
+                files = buoyOrder.Split('|').ToList();
+            }
+
+            foreach (var file in files)
+            {
+                var relativePath = file.Replace("wwwroot", "").Replace("\\", "/");
+
+                experimentTestViewModel.MarkerBuoys.Add(new MarkerBuoy
+                {
+                    Name = "Test",
+                    ImageURL = relativePath,
+                    MarkerBuoyImageType = MarkerBuoyImageType.Real
+                });
+            }
+
+            return View(experimentTestViewModel);
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> Test([FromBody] Test test)
         {
             var current = User as ClaimsPrincipal;
             if (current?.Identity is not ClaimsIdentity currentIdentity)
-            return Unauthorized();
+                return Unauthorized();
 
             var claims = currentIdentity.Claims.ToList();
             claims.RemoveAll(c => c.Type == "HasStartedTest");
@@ -193,5 +230,5 @@ namespace Pontius.Controllers
             var value = values.GetValue(random.Next(values.Length));
             return value is not null ? (ExperimentType)value : default;
         }
-    }   
+    }
 }
