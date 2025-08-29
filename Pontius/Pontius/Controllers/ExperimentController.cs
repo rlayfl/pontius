@@ -69,6 +69,7 @@ namespace Pontius.Controllers
             return View();
         }
 
+        [RedirectIfNOTAuthenticated]
         [HttpGet]
         public IActionResult Start()
         {
@@ -144,7 +145,8 @@ namespace Pontius.Controllers
             return Json(new { success = true });
         }
 
-        [HttpGet]
+        [RedirectIfNOTAuthenticated]
+        [HttpGet]        
         public IActionResult Test()
         {
             var experimentTestViewModel = new ExperimentTestViewModel();

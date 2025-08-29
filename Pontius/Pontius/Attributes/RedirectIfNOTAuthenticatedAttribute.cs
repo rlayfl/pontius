@@ -15,7 +15,7 @@ public class RedirectIfNOTAuthenticatedAttribute : ActionFilterAttribute
         if (user?.Identity == null || !user.Identity.IsAuthenticated)
         {
             // Redirect to Login page if not authenticated
-            context.Result = new RedirectToActionResult("Start", "Experiment", null);
+            context.Result = new RedirectToActionResult("Login", "Account", null);
             return;
         }
 
