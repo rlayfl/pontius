@@ -38,14 +38,27 @@
     var index = 0;
     foreach (var markerBuoy in Model.MarkerBuoys)
     {
-        <img 
-            id="markerBuoy_@index"
-            src="@markerBuoy.ImageURL" 
-            class="@(index == 0 ? "current-buoy" : "d-none")" 
-        />
+
+        <div id="markerBuoy_@index" class="@(index == 0 ? "current-buoy" : "d-none")" >
+            <img src="@markerBuoy.ImageURL" />
+            @markerBuoy.Name
+        </div>
+        
         index++;
     }
 }
+
+
+<div class="buoy-buttons">
+    @foreach (var markerBuoyType in Enum.GetValues(typeof(MarkerBuoyType)))
+    {
+        <button type="button" class="buoy-btn" data-buoy-type="@markerBuoyType">
+            @((markerBuoyType as MarkerBuoyType?).GetValueOrDefault().GetDescription())
+        </button>
+    }
+</div>
+
+
 
 <button type="button" onclick="nextBuoy()">Next Buoy</button>
 

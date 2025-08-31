@@ -7,6 +7,7 @@ namespace Pontius.ExperimentObjects
         public string Name { get; set; }
         public string ImageURL { get; set; }
         public MarkerBuoyImageType MarkerBuoyImageType { get; set; }
+        public MarkerBuoyType MarkerBuoyType { get; set; }
     }
 }
 

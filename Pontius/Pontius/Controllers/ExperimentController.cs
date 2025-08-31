@@ -174,13 +174,51 @@ namespace Pontius.Controllers
 
             foreach (var file in files)
             {
+                var fileName = Path.GetFileNameWithoutExtension(file);
+
+                // Replace underscores with spaces
+                var name = fileName.Replace("_", " ");
+
+                // Remove any trailing numbers (e.g., "Cardinal Mark East 1" → "Cardinal Mark East")
+                name = System.Text.RegularExpressions.Regex.Replace(name, @"\d+$", "");
+
+                // Trim in case there are extra spaces left behind
+                name = name.Trim();
+
+                // Convert to Title Case
+                name = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name);
+
+                MarkerBuoyType buoyType = MarkerBuoyType.Unknown;
+
+                if (fileName.StartsWith("cardinal_mark_north", StringComparison.OrdinalIgnoreCase))
+                    buoyType = MarkerBuoyType.CardinalMarkNorth;
+                else if (fileName.StartsWith("cardinal_mark_south", StringComparison.OrdinalIgnoreCase))
+                    buoyType = MarkerBuoyType.CardinalMarkSouth;
+                else if (fileName.StartsWith("cardinal_mark_east", StringComparison.OrdinalIgnoreCase))
+                    buoyType = MarkerBuoyType.CardinalMarkEast;
+                else if (fileName.StartsWith("cardinal_mark_west", StringComparison.OrdinalIgnoreCase))
+                    buoyType = MarkerBuoyType.CardinalMarkWest;
+                else if (fileName.StartsWith("emergency_wreck_mark", StringComparison.OrdinalIgnoreCase))
+                    buoyType = MarkerBuoyType.EmergencyWreckMark;
+                else if (fileName.StartsWith("isolated_danger_mark", StringComparison.OrdinalIgnoreCase))
+                    buoyType = MarkerBuoyType.IsolatedDangerMark;
+                else if (fileName.StartsWith("port_mark", StringComparison.OrdinalIgnoreCase))
+                    buoyType = MarkerBuoyType.PortMark;
+                else if (fileName.StartsWith("safe_water", StringComparison.OrdinalIgnoreCase))
+                    buoyType = MarkerBuoyType.SafeWaterMark;
+                else if (fileName.StartsWith("special_mark", StringComparison.OrdinalIgnoreCase))
+                    buoyType = MarkerBuoyType.SpecialMark;
+                else if (fileName.StartsWith("starboard_mark", StringComparison.OrdinalIgnoreCase))
+                    buoyType = MarkerBuoyType.StarboardMark;
+
                 var relativePath = file.Replace("wwwroot", "").Replace("\\", "/");
 
                 experimentTestViewModel.MarkerBuoys.Add(new MarkerBuoy
                 {
-                    Name = "Test",
+                    Name = buoyType.GetDescription(),
                     ImageURL = relativePath,
-                    MarkerBuoyImageType = MarkerBuoyImageType.Real
+                    MarkerBuoyImageType = MarkerBuoyImageType.Real,
+                    MarkerBuoyType = buoyType
                 });
             }
 
