@@ -1,18 +1,28 @@
 
 let currentBuoyIndex = 0;
 
+function answer(answer, correctAnswer) {
+    
+    alert("Correct Answer: " + correctAnswer + "Your Answer: " + answer)
+
+}
+
 function initBuoyProgress() {
     const allBuoys = document.querySelectorAll("[id^='markerBuoy_']");
     if (!allBuoys.length) return;
 
-    // Read saved index and clamp to valid range
     const saved = parseInt(localStorage.getItem("buoyIndex") || "0", 10);
     currentBuoyIndex = Number.isFinite(saved) ? Math.min(Math.max(saved, 0), allBuoys.length - 1) : 0;
 
-    // Hide all, then show the current one
     allBuoys.forEach(el => el.classList.add("d-none"));
     const current = document.getElementById("markerBuoy_" + currentBuoyIndex);
     if (current) current.classList.remove("d-none");
+}
+
+function getCurrentBuoyType() {
+    const currentBuoy = document.querySelector('.current-buoy');
+    if (!currentBuoy) return null;
+    return parseInt(currentBuoy.dataset.buoyType); // this gives you the enum int
 }
 
 function nextBuoy() {
@@ -21,8 +31,6 @@ function nextBuoy() {
 
     if (!nextBuoy) {
         console.warn("No more buoys!");
-        // Optionally mark completion; comment out to keep last seen:
-        // localStorage.setItem("buoyCompleted", "true");
         return;
     }
 
@@ -30,16 +38,9 @@ function nextBuoy() {
     if (currentBuoy) currentBuoy.classList.add("d-none");
 
     currentBuoyIndex++;
-    localStorage.setItem("buoyIndex", String(currentBuoyIndex)); // persist progress
-}
-
-// Optional reset button handler
-function resetTestProgress() {
-    localStorage.removeItem("buoyIndex");
-    // localStorage.removeItem("buoyCompleted"); // if you use it
-    currentBuoyIndex = 0;
-    initBuoyProgress();
+    localStorage.setItem("buoyIndex", String(currentBuoyIndex));
 }
 
 document.addEventListener("DOMContentLoaded", initBuoyProgress);
+
 

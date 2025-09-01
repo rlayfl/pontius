@@ -38,8 +38,10 @@
     var index = 0;
     foreach (var markerBuoy in Model.MarkerBuoys)
     {
-
-        <div id="markerBuoy_@index" class="@(index == 0 ? "current-buoy" : "d-none")" >
+        var typeValue = (int)markerBuoy.MarkerBuoyType;
+        <div id="markerBuoy_@index" 
+             class="@(index == 0 ? "current-buoy" : "d-none")" 
+             data-buoy-type="@typeValue">
             <img src="@markerBuoy.ImageURL" />
             @markerBuoy.Name
         </div>
@@ -50,10 +52,14 @@
 
 
 <div class="buoy-buttons">
-    @foreach (var markerBuoyType in Enum.GetValues(typeof(MarkerBuoyType)))
+    @foreach (MarkerBuoyType markerBuoyType in Enum.GetValues(typeof(MarkerBuoyType)))
     {
-        <button type="button" class="buoy-btn" data-buoy-type="@markerBuoyType">
-            @((markerBuoyType as MarkerBuoyType?).GetValueOrDefault().GetDescription())
+        var intValue = (int)markerBuoyType;
+        <button type="button" 
+                class="buoy-btn" 
+                data-buoy-type="@intValue"
+                onclick="answer(@intValue, getCurrentBuoyType())">
+            @markerBuoyType.GetDescription()
         </button>
     }
 </div>
@@ -66,14 +72,6 @@
 
 
 
-
-
-
+<a href="/experiment/test">Submit Test</a>
 
 <script src="/js/experiment/test.js"></script>
-
-
-
-
-
-<a href="/experiment/test">Submit Test</a>

@@ -14,13 +14,49 @@ namespace Pontius.Controllers
 
         private readonly string _firebaseDatabaseEndpoint = "https://pontius-b5de5-default-rtdb.europe-west1.firebasedatabase.app/";
         private readonly string _firebaseExperimentsTableEndpoint;
+        private readonly string _firebaseAnswersTableEndpoint;
 
         private readonly ILogger<HomeController> _logger;
 
         public ExperimentController(ILogger<HomeController> logger)
         {
             _firebaseExperimentsTableEndpoint = $"{_firebaseDatabaseEndpoint}experiments.json";
+            _firebaseAnswersTableEndpoint = $"{_firebaseDatabaseEndpoint}answers.json";
             _logger = logger;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Answer(int correctAnswer, int answer)
+        {
+
+            var current = User as ClaimsPrincipal;
+            if (current?.Identity is not ClaimsIdentity currentIdentity)
+                return Unauthorized();
+
+            var uidClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+
+            var payload = new
+            {
+                UID = uidClaim,
+                correctAnswer = correctAnswer,
+                answer = answer
+            };
+
+            var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), System.Text.Encoding.UTF8, "application/json");
+
+            using var httpClient = new HttpClient();
+            var startExperimentResponse = await httpClient.PostAsync(_firebaseAnswersTableEndpoint, content);
+
+            if (startExperimentResponse.IsSuccessStatusCode)
+            {
+                
+                
+
+                return Json(new { success = true, redirectUrl = Url.Action("overview", "buoys") });
+            }
+
+
+            return Json(new { success = false, message = "Something went wrong DEBUG." });
         }
 
         [HttpGet]
