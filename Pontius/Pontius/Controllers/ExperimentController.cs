@@ -25,8 +25,9 @@ namespace Pontius.Controllers
             _logger = logger;
         }
 
+        [SkipGlobalFilters]
         [HttpPost]
-        public async Task<IActionResult> Answer(int correctAnswer, int answer)
+        public async Task<IActionResult> Answer(int usersCorrectAnswer, int usersAnswer)
         {
 
             var current = User as ClaimsPrincipal;
@@ -38,8 +39,8 @@ namespace Pontius.Controllers
             var payload = new
             {
                 UID = uidClaim,
-                correctAnswer = correctAnswer,
-                answer = answer
+                correctAnswer = usersCorrectAnswer,
+                answer = usersAnswer
             };
 
             var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), System.Text.Encoding.UTF8, "application/json");
@@ -47,16 +48,12 @@ namespace Pontius.Controllers
             using var httpClient = new HttpClient();
             var startExperimentResponse = await httpClient.PostAsync(_firebaseAnswersTableEndpoint, content);
 
-            if (startExperimentResponse.IsSuccessStatusCode)
+            if (!startExperimentResponse.IsSuccessStatusCode)
             {
-                
-                
+                return Json(new { success = false, message = "Something went wrong DEBUG." });
+            }          
 
-                return Json(new { success = true, redirectUrl = Url.Action("overview", "buoys") });
-            }
-
-
-            return Json(new { success = false, message = "Something went wrong DEBUG." });
+            return Json(new { success = true });
         }
 
         [HttpGet]

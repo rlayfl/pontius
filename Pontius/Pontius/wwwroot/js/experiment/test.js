@@ -1,11 +1,43 @@
 
 let currentBuoyIndex = 0;
 
-function answer(answer, correctAnswer) {
-    
-    alert("Correct Answer: " + correctAnswer + "Your Answer: " + answer)
-
+function clearLocalStorage() {
+    localStorage.clear();
 }
+
+function answer(usersAnswer, usersCorrectAnswer) {
+  alert(`Correct Answer: ${usersCorrectAnswer}  Your Answer: ${usersAnswer}`);
+
+  // If you're in Razor, it's safest to generate the URL:
+  // const endpoint = '@Url.Action("Answer", "[YourControllerName]")';
+  const endpoint = 'Answer'; // relative to current controller; adjust if needed
+
+  const body = new URLSearchParams({
+    usersAnswer: String(usersAnswer),
+    usersCorrectAnswer: String(usersCorrectAnswer),
+  }).toString();
+
+  fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    },
+    credentials: 'same-origin' // include cookies if needed for auth
+    ,body
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data?.success && data?.redirectUrl) {
+        nextBuoy()
+    } else {
+        console.log('Server response:', data);
+        nextBuoy()
+      
+    }
+  })
+  .catch(err => console.error('Error:', err));
+}
+
 
 function initBuoyProgress() {
     const allBuoys = document.querySelectorAll("[id^='markerBuoy_']");
@@ -35,7 +67,11 @@ function nextBuoy() {
     }
 
     nextBuoy.classList.remove("d-none");
-    if (currentBuoy) currentBuoy.classList.add("d-none");
+    nextBuoy.classList.add("current-buoy");
+    if (currentBuoy) {
+        currentBuoy.classList.add("d-none");
+        currentBuoy.classList.remove("current-buoy");
+    }
 
     currentBuoyIndex++;
     localStorage.setItem("buoyIndex", String(currentBuoyIndex));

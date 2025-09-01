@@ -4,11 +4,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews(o =>
 {
+    o.Filters.Add<SkipGlobalFiltersAttribute>(); 
     o.Filters.Add<RedirectIfExperimentHasStartedAndTestHasNOTStarted>();
     o.Filters.Add<RedirectIfTestHasStarted>();
-    o.Filters.Add<LogPageVisitToFirebase>();
-
-    
+    o.Filters.Add<LogPageVisitToFirebase>();       
 });
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
