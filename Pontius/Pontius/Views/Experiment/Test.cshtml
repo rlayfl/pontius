@@ -59,18 +59,31 @@
     }
 }
 
-<div class="buoy-buttons">
+<div class="buoy-buttons d-flex flex-wrap gap-2 my-3"></div>
     @foreach (MarkerBuoyType markerBuoyType in Enum.GetValues(typeof(MarkerBuoyType)))
     {
         var intValue = (int)markerBuoyType;
         <button type="button" 
-                class="buoy-btn" 
+                class="buoy-btn btn btn-primary px-4 py-2 rounded shadow-sm"
                 data-buoy-type="@intValue"
                 onclick="answer(@intValue, getCurrentBuoyType(), @experimentTypeInt)">
             @markerBuoyType.GetDescription()
         </button>
     }
 </div>
+<style>
+    .buoy-buttons {
+        justify-content: center;
+    }
+    .buoy-btn {
+        font-size: 1.1rem;
+        transition: background 0.2s, box-shadow 0.2s;
+    }
+    .buoy-btn:hover, .buoy-btn:focus {
+        background: #0056b3;
+        box-shadow: 0 0 8px rgba(0,0,0,0.15);
+    }
+</style>
 
 
 
