@@ -5,8 +5,8 @@ function clearLocalStorage() {
     localStorage.clear();
 }
 
-function answer(usersAnswer, usersCorrectAnswer) {
-  alert(`Correct Answer: ${usersCorrectAnswer}  Your Answer: ${usersAnswer}`);
+function answer(usersAnswer, usersCorrectAnswer, experimentType) {
+alert(`Experiment Type: ${experimentType}\nCorrect Answer: ${usersCorrectAnswer}\nYour Answer: ${usersAnswer}`);
 
   // If you're in Razor, it's safest to generate the URL:
   // const endpoint = '@Url.Action("Answer", "[YourControllerName]")';
@@ -15,6 +15,7 @@ function answer(usersAnswer, usersCorrectAnswer) {
   const body = new URLSearchParams({
     usersAnswer: String(usersAnswer),
     usersCorrectAnswer: String(usersCorrectAnswer),
+    experimentType: String(experimentType)
   }).toString();
 
   fetch(endpoint, {
@@ -48,7 +49,12 @@ function initBuoyProgress() {
 
     allBuoys.forEach(el => el.classList.add("d-none"));
     const current = document.getElementById("markerBuoy_" + currentBuoyIndex);
-    if (current) current.classList.remove("d-none");
+    if (current) {
+        allBuoys.forEach(el => el.classList.remove("current-buoy"));
+        current.classList.remove("d-none");
+        current.classList.add("current-buoy");
+        
+    }
 }
 
 function getCurrentBuoyType() {

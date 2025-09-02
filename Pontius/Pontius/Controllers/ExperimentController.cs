@@ -27,7 +27,7 @@ namespace Pontius.Controllers
 
         [SkipGlobalFilters]
         [HttpPost]
-        public async Task<IActionResult> Answer(int usersCorrectAnswer, int usersAnswer)
+        public async Task<IActionResult> Answer(int usersCorrectAnswer, int usersAnswer, int usersExperimentType)
         {
 
             var current = User as ClaimsPrincipal;
@@ -40,7 +40,8 @@ namespace Pontius.Controllers
             {
                 UID = uidClaim,
                 correctAnswer = usersCorrectAnswer,
-                answer = usersAnswer
+                answer = usersAnswer,
+                experimentType = usersExperimentType
             };
 
             var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), System.Text.Encoding.UTF8, "application/json");
@@ -92,6 +93,14 @@ namespace Pontius.Controllers
             return View();
         }
 
+        public ExperimentType GetRandomExperimentType()
+        {
+            var values = Enum.GetValues(typeof(ExperimentType));
+            var random = new Random();
+            var value = values.GetValue(random.Next(values.Length));
+            return value is not null ? (ExperimentType)value : default;
+        }
+
         public IActionResult InProgress()
         {
             return View();
@@ -117,13 +126,13 @@ namespace Pontius.Controllers
             var debugPassword = "TestPassword";
             //var experimentType = GetRandomExperimentType();
 
-            var experimentType = "InformationOverload";
+            var experimentTypeEnum = ExperimentType.InformationOverload;
 
             var payload = new
             {
                 username = debugUsername,
                 password = debugPassword,
-                experimentType = experimentType
+                experimentType = experimentTypeEnum
             };
 
             var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), System.Text.Encoding.UTF8, "application/json");
@@ -142,7 +151,7 @@ namespace Pontius.Controllers
                 claims.Add(new Claim("HasStartedExperiment", true.ToString()));
 
                 claims.RemoveAll(c => c.Type == "ExperimentType");
-                claims.Add(new Claim("ExperimentType", experimentType.ToString()));
+                claims.Add(new Claim("ExperimentType", experimentTypeEnum.ToString()));
 
                 var newIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var newPrincipal = new ClaimsPrincipal(newIdentity);
@@ -294,14 +303,6 @@ namespace Pontius.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        public ExperimentType GetRandomExperimentType()
-        {
-            var values = Enum.GetValues(typeof(ExperimentType));
-            var random = new Random();
-            var value = values.GetValue(random.Next(values.Length));
-            return value is not null ? (ExperimentType)value : default;
-        }
+        }        
     }
 }

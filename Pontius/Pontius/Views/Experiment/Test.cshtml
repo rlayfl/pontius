@@ -4,8 +4,17 @@
 
 @{
     var experimentTypeClaim = User.Claims.FirstOrDefault(c => c.Type == "ExperimentType")?.Value;
+
+    int? experimentTypeInt = null;
+
+    if (!string.IsNullOrEmpty(experimentTypeClaim) && 
+        Enum.TryParse<ExperimentType>(experimentTypeClaim, out var experimentTypeEnum))
+    {
+        experimentTypeInt = (int)experimentTypeEnum;
+    }
 }
-<p>Experiment Type: @experimentTypeClaim</p>
+
+<p>Experiment Type: @(experimentTypeInt?.ToString() ?? "Unknown")</p>
 
 @switch (experimentTypeClaim)
 {
@@ -58,7 +67,7 @@
         <button type="button" 
                 class="buoy-btn" 
                 data-buoy-type="@intValue"
-                onclick="answer(@intValue, getCurrentBuoyType())">
+                onclick="answer(@intValue, getCurrentBuoyType(), @experimentTypeInt)">
             @markerBuoyType.GetDescription()
         </button>
     }
