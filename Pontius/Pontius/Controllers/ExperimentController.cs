@@ -6,6 +6,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json;
 
 namespace Pontius.Controllers
 {
@@ -41,7 +42,8 @@ namespace Pontius.Controllers
                 UID = uidClaim,
                 correctAnswer = usersCorrectAnswer,
                 answer = usersAnswer,
-                experimentType = usersExperimentType
+                experimentType = usersExperimentType,
+                timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
             };
 
             var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), System.Text.Encoding.UTF8, "application/json");
@@ -60,18 +62,20 @@ namespace Pontius.Controllers
         [HttpGet]
         public async Task<IActionResult> End()
         {
+            var identity = (ClaimsIdentity)User.Identity!;
 
-            var claims = new List<Claim>
+            void UpdateClaim(string type, string value)
             {
-                new(ClaimTypes.NameIdentifier, User.Identity?.Name ?? string.Empty),
-                new(ClaimTypes.Name, User.Identity?.Name ?? string.Empty),
-                new(ClaimTypes.Role, "Legionnaire"),
-                new("HasStartedExperiment", false.ToString()),
-                new("ExperimentType", string.Empty),
-                new("HasStartedTest", false.ToString())
-            };
+                var existingClaim = identity.FindFirst(type);
+                if (existingClaim != null)
+                    identity.RemoveClaim(existingClaim);
 
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                identity.AddClaim(new Claim(type, value));
+            }
+            UpdateClaim("HasStartedExperiment", false.ToString());
+            UpdateClaim("ExperimentType", string.Empty);
+            UpdateClaim("HasStartedTest", false.ToString());
+
             var principal = new ClaimsPrincipal(identity);
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -81,6 +85,7 @@ namespace Pontius.Controllers
 
             return RedirectToAction("ExperimentEnded", "Experiment");
         }
+
 
         public IActionResult ExperimentEnded()
         {
@@ -121,18 +126,21 @@ namespace Pontius.Controllers
         [HttpPost]
         public async Task<IActionResult> Start([FromBody] Start start)
         {
-
-            var debugUsername = "TestUsername";
-            var debugPassword = "TestPassword";
             //var experimentType = GetRandomExperimentType();
+
+            var current = User as ClaimsPrincipal;
+                if (current?.Identity is not ClaimsIdentity currentIdentity)
+                    return Unauthorized();
 
             var experimentTypeEnum = ExperimentType.InformationOverload;
 
+            var uidClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+
             var payload = new
             {
-                username = debugUsername,
-                password = debugPassword,
-                experimentType = experimentTypeEnum
+                UID = uidClaim,
+                experimentType = experimentTypeEnum,
+                timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
             };
 
             var content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payload), System.Text.Encoding.UTF8, "application/json");
@@ -142,9 +150,9 @@ namespace Pontius.Controllers
 
             if (startExperimentResponse.IsSuccessStatusCode)
             {
-                var current = User as ClaimsPrincipal;
-                if (current?.Identity is not ClaimsIdentity currentIdentity)
-                    return Unauthorized();
+                var responseContent = await startExperimentResponse.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(responseContent);
+                var experimentID = doc.RootElement.GetProperty("name").GetString();                
 
                 var claims = currentIdentity.Claims.ToList();
                 claims.RemoveAll(c => c.Type == "HasStartedExperiment");

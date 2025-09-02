@@ -56,9 +56,13 @@ namespace Pontius.Controllers
 
             if (createAccountResponse.IsSuccessStatusCode)
             {
+                var responseContent = await createAccountResponse.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(responseContent);
+                var localId = doc.RootElement.GetProperty("localId").GetString();
+
                 var claims = new List<Claim>
                 {
-                    new(ClaimTypes.NameIdentifier, createAccount.EmailAddress),
+                    new(ClaimTypes.NameIdentifier, localId),
                     new("HasStartedExperiment", false.ToString()),
                     new("ExperimentType", string.Empty),
                     new("HasStartedTest", false.ToString())
@@ -67,11 +71,7 @@ namespace Pontius.Controllers
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-                var responseContent = await createAccountResponse.Content.ReadAsStringAsync();
-                using var doc = JsonDocument.Parse(responseContent);
-                var localId = doc.RootElement.GetProperty("localId").GetString();
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);                
 
                 var userAccountPayload = new
                 {
@@ -134,17 +134,13 @@ namespace Pontius.Controllers
                             break;
                         }
                     }
-
-                    // You now have userAccountKey, which is the key for the user account associated with localId.
-                    // You can fetch more details if needed.
                 }
 
 
 
                 var claims = new List<Claim>
                 {
-                    new(ClaimTypes.NameIdentifier, login.EmailAddress),
-                    new(ClaimTypes.Name, login.EmailAddress),
+                    new(ClaimTypes.NameIdentifier, localId),
                     new("HasStartedExperiment", false.ToString()),
                     new("ExperimentType", string.Empty),
                     new("HasStartedTest", false.ToString())

@@ -32,8 +32,7 @@ public class LogPageVisitToFirebase : IAsyncActionFilter
 
         var payload = new
         {
-            username = "TestUsername",
-            password = "TestPassword",
+            nameIdentifier = context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
             clickTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
             url = context.HttpContext.Request.Path + context.HttpContext.Request.QueryString
         };

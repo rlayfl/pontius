@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Pontius.Models;
+using System;
 using System.Diagnostics;
 
 namespace Pontius.Controllers
@@ -29,13 +30,9 @@ namespace Pontius.Controllers
         public async Task<IActionResult> LogClick()
         {
 
-            var debugUsername = "TestUsername";
-            var debugPassword = "TestPassword";
-
             var payload = new
             {
-                username = debugUsername,
-                password = debugPassword,
+                nameIdentifier = HttpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value,
                 clickTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
             };
 
