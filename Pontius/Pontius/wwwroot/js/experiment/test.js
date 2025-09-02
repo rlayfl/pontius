@@ -6,11 +6,10 @@ function clearLocalStorage() {
 }
 
 function answer(usersAnswer, usersCorrectAnswer, experimentType) {
-alert(`Experiment Type: ${experimentType}\nCorrect Answer: ${usersCorrectAnswer}\nYour Answer: ${usersAnswer}`);
+//alert(`Experiment Type: ${experimentType}\nCorrect Answer: ${usersCorrectAnswer}\nYour Answer: ${usersAnswer}`);
 
-  // If you're in Razor, it's safest to generate the URL:
-  // const endpoint = '@Url.Action("Answer", "[YourControllerName]")';
-  const endpoint = 'Answer'; // relative to current controller; adjust if needed
+
+  const endpoint = 'Answer';
 
   const body = new URLSearchParams({
     usersAnswer: String(usersAnswer),
@@ -23,7 +22,7 @@ alert(`Experiment Type: ${experimentType}\nCorrect Answer: ${usersCorrectAnswer}
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     },
-    credentials: 'same-origin' // include cookies if needed for auth
+    credentials: 'same-origin'
     ,body
   })
   .then(r => r.json())
@@ -41,6 +40,9 @@ alert(`Experiment Type: ${experimentType}\nCorrect Answer: ${usersCorrectAnswer}
 
 
 function initBuoyProgress() {
+
+    
+
     const allBuoys = document.querySelectorAll("[id^='markerBuoy_']");
     if (!allBuoys.length) return;
 
@@ -48,6 +50,12 @@ function initBuoyProgress() {
     currentBuoyIndex = Number.isFinite(saved) ? Math.min(Math.max(saved, 0), allBuoys.length - 1) : 0;
 
     allBuoys.forEach(el => el.classList.add("d-none"));
+
+    if (localStorage.getItem("experimentFinished") === "true") {
+        alert("You have already completed this experiment.");
+        return;
+    }
+
     const current = document.getElementById("markerBuoy_" + currentBuoyIndex);
     if (current) {
         allBuoys.forEach(el => el.classList.remove("current-buoy"));
@@ -68,6 +76,9 @@ function nextBuoy() {
     const nextBuoy = document.getElementById("markerBuoy_" + (currentBuoyIndex + 1));
 
     if (!nextBuoy) {
+        alert("You have completed this experiment.")
+        currentBuoy.classList.add("d-none");
+        localStorage.setItem("experimentFinished", String(true));
         console.warn("No more buoys!");
         return;
     }
